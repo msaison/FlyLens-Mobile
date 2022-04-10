@@ -1,2 +1,2 @@
 # MOBILE
-bonjour
+Je nique tes pull request 🖕
