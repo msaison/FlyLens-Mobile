@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flylens/components/weather_show.dart';
 
 class HomeMain extends StatefulWidget {
-  const HomeMain({Key key}) : super(key: key);
+  const HomeMain({Key? key}) : super(key: key);
 
   @override
   State<HomeMain> createState() => _HomeMainState();

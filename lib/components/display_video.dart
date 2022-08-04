@@ -7,23 +7,23 @@ class DisplayVideo extends StatefulWidget {
   final String path;
 
   const DisplayVideo( this.path,
-    {Key key}) : super(key: key);
+    {Key? key}) : super(key: key);
 
   @override
   __DisplayVideoState createState() => __DisplayVideoState();
 }
 
 class __DisplayVideoState extends State<DisplayVideo> {
-  VideoPlayerController _controller;
+  VideoPlayerController? _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.asset(widget.path)
       ..initialize().then((_) {
-        _controller.setLooping(true);
+        _controller!.setLooping(true);
         setState(() {
-          _controller.play();
+          _controller!.play();
         });
       });
   }
@@ -32,10 +32,10 @@ class __DisplayVideoState extends State<DisplayVideo> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _controller.value.isInitialized
+        child: _controller!.value.isInitialized
             ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+                aspectRatio: _controller!.value.aspectRatio,
+                child: VideoPlayer(_controller!),
               )
             : Container(),
       ),
@@ -45,6 +45,6 @@ class __DisplayVideoState extends State<DisplayVideo> {
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _controller!.dispose();
   }
 }
