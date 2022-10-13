@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flylens/config.dart';
+import '../config.dart';
 import 'package:weather/weather.dart';
 
 class WeatherShow extends StatefulWidget {
@@ -39,7 +39,7 @@ class _WeatherShowState extends State<WeatherShow> {
                           Text.rich(
                             TextSpan(
                                 text: '${weather.data!.tempMax!.celsius!.toInt().toString()}°C ',
-                                style: TextStyle(color: Color(0xff033323), fontWeight: FontWeight.w600, fontSize: 10),
+                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                                 children: [
                                   TextSpan(
                                       text: '${weather.data!.tempMin!.celsius!.toInt().toString()}°C',
@@ -56,7 +56,7 @@ class _WeatherShowState extends State<WeatherShow> {
                           Text.rich(
                             TextSpan(
                                 text: '${weather.data!.date!.hour}:${weather.data!.date!.minute}h ',
-                                style: TextStyle(color: Color(0xff033323), fontWeight: FontWeight.w600, fontSize: 10),
+                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                                 children: [
                                   TextSpan(
                                       text:
@@ -73,7 +73,7 @@ class _WeatherShowState extends State<WeatherShow> {
                               ),
                               Text(
                                 '${weather.data!.humidity}%',
-                                style: TextStyle(color: Color(0xff033323), fontWeight: FontWeight.w600, fontSize: 10),
+                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                               ),
                               SizedBox(width: 10),
                               Icon(
@@ -83,7 +83,7 @@ class _WeatherShowState extends State<WeatherShow> {
                               ),
                               Text(
                                 '${weather.data!.windSpeed}m/s',
-                                style: TextStyle(color: Color(0xff033323), fontWeight: FontWeight.w600, fontSize: 10),
+                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                               ),
                             ],
                           )

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Theme;
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flylens/config.dart';
+import '../../config.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapsMain extends StatefulWidget {
@@ -34,29 +34,19 @@ class _MapsMainState extends State<MapsMain> {
                     });
                   },
                 ),
-                layers: [
-                  // TileLayerOptions(
-                  //   urlTemplate: GEOMAPAGRILINK,
-                  // ),
-                  TileLayerOptions(
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://wxs.ign.fr/agriculture/geoportail/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=LANDUSE.AGRICULTURE2021&TILEMATRIXSET=PM&TILEMATRIX={z}&TILECOL={x}&TILEROW={y}&STYLE=normal&FORMAT=image/png',
+                  ),
+                  TileLayer(
                     urlTemplate: GEOMAPLINK,
                     maxZoom: 21,
                     maxNativeZoom: 21,
-                    // wmsOptions: WMSTileLayerOptions(
-                    //   baseUrl: 'https://wxs.ign.fr/agriculture/geoportail/r/wms?SERVICE=WMS&REQUEST=GetCapabilities&service=WMS&request=GetMap&styles=&width=256&height=256',
-                    //   layers: ['LANDUSE.AGRICULTURE2020'],
-                    //   crs: Epsg4326(),
-                    //   format: 'image/png',
-                    //   version: '1.3.0',
-                    // ),
                   ),
-                  PolygonLayerOptions(
+                  PolygonLayer(
                     polygons: [
-                      Polygon(
-                        points: fieldTest,
-                        color: Colors.red.withOpacity(0.5),
-                        isFilled: true
-                      ),
+                      Polygon(points: fieldTest, color: Colors.red.withOpacity(0.5), isFilled: true),
                     ],
                   ),
                 ],
@@ -64,7 +54,7 @@ class _MapsMainState extends State<MapsMain> {
             ])
           : Center(
               child: SpinKitWave(
-                color: Color(0xff033323),
+                color: AppColor.primaryColor,
               ),
             ),
     );

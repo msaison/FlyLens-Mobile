@@ -1,14 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flylens/components/button.dart';
-import 'package:flylens/helper.dart';
-import 'package:flylens/screens/create_fields/components/card_create_fields.dart';
+import '../../Models/fields/fields_model.dart';
+import '../../components/button.dart';
+import '../../helper.dart';
+import 'components/card_create_fields.dart';
+import 'components/header_create_fields.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../config.dart';
 
@@ -21,12 +22,14 @@ class MainCreateFields extends StatefulWidget {
 
 class _MainCreateFieldsState extends State<MainCreateFields> {
   bool _isLoading = true;
+  bool _isEditingPolygon = false;
   MapController _mapController = MapController();
   final _formKey = GlobalKey<FormState>();
   TextEditingController _controller = TextEditingController();
   Color _pickColor = Colors.white;
   String? errorColor;
-  List<Polygon> polygons = [];
+  List<LatLng> pointTmp = [];
+  List<FieldsModel> fields = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +43,12 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                   maxZoom: 19.0,
                   minZoom: 4,
                   zoom: 16.0,
-                  onTap: (tapPosition, point) {},
+                  onTap: (tapPosition, point) {
+                    print(fields[0].polygons);
+                  },
                 ),
-                layers: [
-                  // TileLayerOptions(
-                  //   urlTemplate: GEOMAPAGRILINK,
-                  // ),
-                  TileLayerOptions(
+                children: [
+                  TileLayer(
                     urlTemplate: GEOMAPLINK,
                     maxZoom: 21,
                     maxNativeZoom: 21,
@@ -58,10 +60,41 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                     //   version: '1.3.0',
                     // ),
                   ),
-                  PolygonLayerOptions(
-                    polygons: polygons,
-                  ),
+                  MarkerLayer(
+                      markers: List.generate(pointTmp.length, (index) {
+                    return Marker(
+                        point: pointTmp[index],
+                        builder: (context) => Icon(
+                              Icons.radio_button_checked_rounded,
+                              color: _pickColor,
+                              size: 15,
+                            ));
+                  })),
+                  PolygonLayer(
+                      polygons: List.generate(fields.length, (index) {
+                            return Polygon(
+                                points: fields[index].polygons,
+                                isFilled: true,
+                                color: fields[index].color,
+                                label: fields[index].name);
+                          }) +
+                          [Polygon(points: pointTmp, color: _pickColor.withOpacity(0.5), isFilled: true)]),
                 ],
+              ),
+              _isEditingPolygon
+                  ? Center(
+                      child: Icon(
+                        Icons.location_searching_rounded,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(color: Colors.black.withOpacity(0.5), offset: Offset(0, 0), blurRadius: 5),
+                        ],
+                      ),
+                    )
+                  : SizedBox(),
+              HeaderCreateFields(
+                onEditing: _isEditingPolygon,
+                onEditingPointNumber: pointTmp.length,
               ),
               Align(
                 alignment: Alignment.bottomLeft,
@@ -72,37 +105,125 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return CardCreateFields(
-                          onTapDelete: () => polygons.removeAt(index),
+                          fieldName: fields[index].name,
+                          onTapDelete: () => print('delete'),
                         );
                       },
-                      itemCount: polygons.length,
+                      itemCount: fields.length,
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 105.h, right: 23.w),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: InkWell(
-                    onTap: () => dialogCreateFields(),
-                    child: Container(
-                      height: 58,
-                      width: 58,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                      child: Icon(
-                        Icons.add_rounded,
-                        size: 30,
-                        color: Color(0xFF033323),
+              !_isEditingPolygon
+                  ? Padding(
+                      padding: EdgeInsets.only(bottom: 105.h, right: 23.w),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: InkWell(
+                          onTap: () => dialogCreateFields(),
+                          child: Container(
+                            height: 58,
+                            width: 58,
+                            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                            child: Icon(
+                              Icons.add_rounded,
+                              size: 30,
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              )
+                    )
+                  : Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 100,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.only(topLeft: Radius.circular(7.r), topRight: Radius.circular(10.r))),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10.0.h, bottom: 10.0.h, left: 25.0.w, right: 25.0.w),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Button(
+                                    width: 125.w,
+                                    height: 35.h,
+                                    textButton: 'Retour en arrière',
+                                    border: Border.all(color: AppColor.primaryColor),
+                                    textColor: AppColor.primaryColor,
+                                    onTap: () {
+                                      setState(() {
+                                        pointTmp.removeLast();
+                                      });
+                                    },
+                                  ),
+                                  Button(
+                                    width: 125.w,
+                                    height: 35.h,
+                                    textButton: 'Ajouter un point',
+                                    backgroundColor: AppColor.primaryColor,
+                                    onTap: () {
+                                      setState(() {
+                                        pointTmp.add(_mapController.center);
+                                      });
+                                      // polygons.add(Polygon(points: points))
+                                      // fields.add(FieldsModel(id: Uuid().v4(), name: 'Name', color: Colors.red, polygons: polygons))
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Button(
+                                    width: 125.w,
+                                    height: 35.h,
+                                    border: Border.all(color: Colors.green),
+                                    textColor: Colors.green,
+                                    textButton: 'Créer',
+                                    onTap: () {
+                                      print('créer');
+                                      setState(() {
+                                        fields.add(FieldsModel(
+                                            id: Uuid().v4(),
+                                            name: _controller.text,
+                                            color: _pickColor,
+                                            polygons: pointTmp));
+                                        _isEditingPolygon = false;
+                                      });
+                                    },
+                                  ),
+                                  Button(
+                                    width: 125.w,
+                                    height: 35.h,
+                                    border: Border.all(color: Colors.red),
+                                    textColor: Colors.red,
+                                    textButton: 'Annuler',
+                                    onTap: () {
+                                      setState(() {
+                                        _isEditingPolygon = false;
+                                        pointTmp.clear();
+                                        _controller.clear();
+                                        _pickColor = Colors.white;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
             ])
           : Center(
               child: SpinKitWave(
-                color: Color(0xff033323),
+                color: AppColor.primaryColor,
               ),
             ),
     );
@@ -122,7 +243,7 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(
                           'Nom du champ*',
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: Color(0xFF033323)),
+                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.primaryColor),
                         ),
                       ),
                       TextFormField(
@@ -138,7 +259,7 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                         decoration: InputDecoration(
                             errorStyle: const TextStyle(fontSize: 12, height: 0),
                             filled: true,
-                            fillColor: const Color(0xFF033323).withOpacity(0.03),
+                            fillColor: AppColor.primaryColor.withOpacity(0.03),
                             contentPadding: const EdgeInsets.fromLTRB(9.5, 17.5, 9.5, 17.5),
                             focusedErrorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(6),
@@ -154,8 +275,8 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                                 )),
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(6),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF033323),
+                                borderSide: BorderSide(
+                                  color: AppColor.primaryColor,
                                   width: 0.5,
                                 )),
                             border: UnderlineInputBorder(
@@ -168,7 +289,7 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                         padding: const EdgeInsets.only(bottom: 10, top: 10),
                         child: Text(
                           'Couleur*',
-                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: Color(0xFF033323)),
+                          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColor.primaryColor),
                         ),
                       ),
                       BlockPicker(
@@ -192,7 +313,7 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                           : SizedBox(),
                       Button(
                         textButton: 'Create',
-                        backgroundColor: Color(0xFF033323),
+                        backgroundColor: AppColor.primaryColor,
                         afterText: Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Container(
@@ -203,9 +324,14 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                         ),
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            log(_pickColor.value.toString() + "|" + Colors.white.value.toString());
                             if (_pickColor.value != Colors.white.value) {
-                              
+                              setState(() {
+                                _isEditingPolygon = true;
+                                pointTmp.clear();
+                                _controller.clear();
+                                _pickColor = Colors.white;
+                                Navigator.pop(context);
+                              });
                             } else {
                               _setState(() {
                                 errorColor = 'Il faut choisir une couleur.';

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/components/button.dart';
+import '../../../components/button.dart';
 
 class CardCreateFields extends StatefulWidget {
   final VoidCallback? onTapEdit;
   final VoidCallback? onDoubleTapEdit;
   final VoidCallback? onTapDelete;
   final VoidCallback? onDoubleTapDelete;
+  final String fieldName;
   const CardCreateFields({
+    this.fieldName = 'FieldsName',
     this.onTapEdit,
     this.onDoubleTapEdit,
     this.onTapDelete,
@@ -31,7 +33,7 @@ class _CardCreateFieldsState extends State<CardCreateFields> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'FieldsName#1',
+              widget.fieldName,
               style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
             ),
             Row(

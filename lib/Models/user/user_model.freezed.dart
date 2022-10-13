@@ -22,37 +22,15 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String? get id => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
-  String? get accountType => throw _privateConstructorUsedError;
-  String? get profileType => throw _privateConstructorUsedError;
-  String? get socialMedia => throw _privateConstructorUsedError;
-  String? get publicPersonality => throw _privateConstructorUsedError;
-  String? get shopName => throw _privateConstructorUsedError;
-  String? get website => throw _privateConstructorUsedError;
-  String? get address => throw _privateConstructorUsedError;
-  String? get country => throw _privateConstructorUsedError;
-  String? get city => throw _privateConstructorUsedError;
-  String? get street => throw _privateConstructorUsedError;
-  String? get siret => throw _privateConstructorUsedError;
-  String? get lastName => throw _privateConstructorUsedError;
-  String? get firstName => throw _privateConstructorUsedError;
-  String? get userName => throw _privateConstructorUsedError;
-  List<String> get likedId => throw _privateConstructorUsedError;
-  int get postsNumber => throw _privateConstructorUsedError;
-  int get projectsNumber => throw _privateConstructorUsedError;
-  int get productsNumber => throw _privateConstructorUsedError;
-  int get eventsNumber => throw _privateConstructorUsedError;
-  int get followersNumber => throw _privateConstructorUsedError;
-  List<String> get followingsId => throw _privateConstructorUsedError;
-  List<String> get participatesId => throw _privateConstructorUsedError;
-  List<String> get keywords => throw _privateConstructorUsedError;
-  String? get image => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
+  String? get prenom => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get naissance => throw _privateConstructorUsedError;
+  String? get profilePicture => throw _privateConstructorUsedError;
+  String? get sexe => throw _privateConstructorUsedError;
   bool get registrationDone => throw _privateConstructorUsedError;
   bool get socialRegister => throw _privateConstructorUsedError;
-  bool get notifAllowed => throw _privateConstructorUsedError;
-  String? get token => throw _privateConstructorUsedError;
-  Map<dynamic, dynamic> get usersBlocked => throw _privateConstructorUsedError;
-  Map<dynamic, dynamic> get blockedBy => throw _privateConstructorUsedError;
+  List<String>? get enterprise => throw _privateConstructorUsedError;
+  List<String>? get joinEnterprise => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,37 +45,14 @@ abstract class $UserModelCopyWith<$Res> {
   $Res call(
       {String? id,
       String? email,
-      String? accountType,
-      String? profileType,
-      String? socialMedia,
-      String? publicPersonality,
-      String? shopName,
-      String? website,
-      String? address,
-      String? country,
-      String? city,
-      String? street,
-      String? siret,
-      String? lastName,
-      String? firstName,
-      String? userName,
-      List<String> likedId,
-      int postsNumber,
-      int projectsNumber,
-      int productsNumber,
-      int eventsNumber,
-      int followersNumber,
-      List<String> followingsId,
-      List<String> participatesId,
-      List<String> keywords,
-      String? image,
-      String? description,
+      String? prenom,
+      @TimestampConverter() DateTime naissance,
+      String? profilePicture,
+      String? sexe,
       bool registrationDone,
       bool socialRegister,
-      bool notifAllowed,
-      String? token,
-      Map<dynamic, dynamic> usersBlocked,
-      Map<dynamic, dynamic> blockedBy});
+      List<String>? enterprise,
+      List<String>? joinEnterprise});
 }
 
 /// @nodoc
@@ -112,37 +67,14 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? email = freezed,
-    Object? accountType = freezed,
-    Object? profileType = freezed,
-    Object? socialMedia = freezed,
-    Object? publicPersonality = freezed,
-    Object? shopName = freezed,
-    Object? website = freezed,
-    Object? address = freezed,
-    Object? country = freezed,
-    Object? city = freezed,
-    Object? street = freezed,
-    Object? siret = freezed,
-    Object? lastName = freezed,
-    Object? firstName = freezed,
-    Object? userName = freezed,
-    Object? likedId = freezed,
-    Object? postsNumber = freezed,
-    Object? projectsNumber = freezed,
-    Object? productsNumber = freezed,
-    Object? eventsNumber = freezed,
-    Object? followersNumber = freezed,
-    Object? followingsId = freezed,
-    Object? participatesId = freezed,
-    Object? keywords = freezed,
-    Object? image = freezed,
-    Object? description = freezed,
+    Object? prenom = freezed,
+    Object? naissance = freezed,
+    Object? profilePicture = freezed,
+    Object? sexe = freezed,
     Object? registrationDone = freezed,
     Object? socialRegister = freezed,
-    Object? notifAllowed = freezed,
-    Object? token = freezed,
-    Object? usersBlocked = freezed,
-    Object? blockedBy = freezed,
+    Object? enterprise = freezed,
+    Object? joinEnterprise = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -153,105 +85,21 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      accountType: accountType == freezed
-          ? _value.accountType
-          : accountType // ignore: cast_nullable_to_non_nullable
+      prenom: prenom == freezed
+          ? _value.prenom
+          : prenom // ignore: cast_nullable_to_non_nullable
               as String?,
-      profileType: profileType == freezed
-          ? _value.profileType
-          : profileType // ignore: cast_nullable_to_non_nullable
+      naissance: naissance == freezed
+          ? _value.naissance
+          : naissance // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      profilePicture: profilePicture == freezed
+          ? _value.profilePicture
+          : profilePicture // ignore: cast_nullable_to_non_nullable
               as String?,
-      socialMedia: socialMedia == freezed
-          ? _value.socialMedia
-          : socialMedia // ignore: cast_nullable_to_non_nullable
-              as String?,
-      publicPersonality: publicPersonality == freezed
-          ? _value.publicPersonality
-          : publicPersonality // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shopName: shopName == freezed
-          ? _value.shopName
-          : shopName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      website: website == freezed
-          ? _value.website
-          : website // ignore: cast_nullable_to_non_nullable
-              as String?,
-      address: address == freezed
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
-      country: country == freezed
-          ? _value.country
-          : country // ignore: cast_nullable_to_non_nullable
-              as String?,
-      city: city == freezed
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String?,
-      street: street == freezed
-          ? _value.street
-          : street // ignore: cast_nullable_to_non_nullable
-              as String?,
-      siret: siret == freezed
-          ? _value.siret
-          : siret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: lastName == freezed
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      firstName: firstName == freezed
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userName: userName == freezed
-          ? _value.userName
-          : userName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      likedId: likedId == freezed
-          ? _value.likedId
-          : likedId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      postsNumber: postsNumber == freezed
-          ? _value.postsNumber
-          : postsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      projectsNumber: projectsNumber == freezed
-          ? _value.projectsNumber
-          : projectsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      productsNumber: productsNumber == freezed
-          ? _value.productsNumber
-          : productsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      eventsNumber: eventsNumber == freezed
-          ? _value.eventsNumber
-          : eventsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      followersNumber: followersNumber == freezed
-          ? _value.followersNumber
-          : followersNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingsId: followingsId == freezed
-          ? _value.followingsId
-          : followingsId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      participatesId: participatesId == freezed
-          ? _value.participatesId
-          : participatesId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      keywords: keywords == freezed
-          ? _value.keywords
-          : keywords // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      image: image == freezed
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+      sexe: sexe == freezed
+          ? _value.sexe
+          : sexe // ignore: cast_nullable_to_non_nullable
               as String?,
       registrationDone: registrationDone == freezed
           ? _value.registrationDone
@@ -261,22 +109,14 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.socialRegister
           : socialRegister // ignore: cast_nullable_to_non_nullable
               as bool,
-      notifAllowed: notifAllowed == freezed
-          ? _value.notifAllowed
-          : notifAllowed // ignore: cast_nullable_to_non_nullable
-              as bool,
-      token: token == freezed
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      usersBlocked: usersBlocked == freezed
-          ? _value.usersBlocked
-          : usersBlocked // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>,
-      blockedBy: blockedBy == freezed
-          ? _value.blockedBy
-          : blockedBy // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>,
+      enterprise: enterprise == freezed
+          ? _value.enterprise
+          : enterprise // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      joinEnterprise: joinEnterprise == freezed
+          ? _value.joinEnterprise
+          : joinEnterprise // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -290,37 +130,14 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
   $Res call(
       {String? id,
       String? email,
-      String? accountType,
-      String? profileType,
-      String? socialMedia,
-      String? publicPersonality,
-      String? shopName,
-      String? website,
-      String? address,
-      String? country,
-      String? city,
-      String? street,
-      String? siret,
-      String? lastName,
-      String? firstName,
-      String? userName,
-      List<String> likedId,
-      int postsNumber,
-      int projectsNumber,
-      int productsNumber,
-      int eventsNumber,
-      int followersNumber,
-      List<String> followingsId,
-      List<String> participatesId,
-      List<String> keywords,
-      String? image,
-      String? description,
+      String? prenom,
+      @TimestampConverter() DateTime naissance,
+      String? profilePicture,
+      String? sexe,
       bool registrationDone,
       bool socialRegister,
-      bool notifAllowed,
-      String? token,
-      Map<dynamic, dynamic> usersBlocked,
-      Map<dynamic, dynamic> blockedBy});
+      List<String>? enterprise,
+      List<String>? joinEnterprise});
 }
 
 /// @nodoc
@@ -337,37 +154,14 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? email = freezed,
-    Object? accountType = freezed,
-    Object? profileType = freezed,
-    Object? socialMedia = freezed,
-    Object? publicPersonality = freezed,
-    Object? shopName = freezed,
-    Object? website = freezed,
-    Object? address = freezed,
-    Object? country = freezed,
-    Object? city = freezed,
-    Object? street = freezed,
-    Object? siret = freezed,
-    Object? lastName = freezed,
-    Object? firstName = freezed,
-    Object? userName = freezed,
-    Object? likedId = freezed,
-    Object? postsNumber = freezed,
-    Object? projectsNumber = freezed,
-    Object? productsNumber = freezed,
-    Object? eventsNumber = freezed,
-    Object? followersNumber = freezed,
-    Object? followingsId = freezed,
-    Object? participatesId = freezed,
-    Object? keywords = freezed,
-    Object? image = freezed,
-    Object? description = freezed,
+    Object? prenom = freezed,
+    Object? naissance = freezed,
+    Object? profilePicture = freezed,
+    Object? sexe = freezed,
     Object? registrationDone = freezed,
     Object? socialRegister = freezed,
-    Object? notifAllowed = freezed,
-    Object? token = freezed,
-    Object? usersBlocked = freezed,
-    Object? blockedBy = freezed,
+    Object? enterprise = freezed,
+    Object? joinEnterprise = freezed,
   }) {
     return _then(_$_UserModel(
       id: id == freezed
@@ -378,105 +172,21 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      accountType: accountType == freezed
-          ? _value.accountType
-          : accountType // ignore: cast_nullable_to_non_nullable
+      prenom: prenom == freezed
+          ? _value.prenom
+          : prenom // ignore: cast_nullable_to_non_nullable
               as String?,
-      profileType: profileType == freezed
-          ? _value.profileType
-          : profileType // ignore: cast_nullable_to_non_nullable
+      naissance: naissance == freezed
+          ? _value.naissance
+          : naissance // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      profilePicture: profilePicture == freezed
+          ? _value.profilePicture
+          : profilePicture // ignore: cast_nullable_to_non_nullable
               as String?,
-      socialMedia: socialMedia == freezed
-          ? _value.socialMedia
-          : socialMedia // ignore: cast_nullable_to_non_nullable
-              as String?,
-      publicPersonality: publicPersonality == freezed
-          ? _value.publicPersonality
-          : publicPersonality // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shopName: shopName == freezed
-          ? _value.shopName
-          : shopName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      website: website == freezed
-          ? _value.website
-          : website // ignore: cast_nullable_to_non_nullable
-              as String?,
-      address: address == freezed
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
-      country: country == freezed
-          ? _value.country
-          : country // ignore: cast_nullable_to_non_nullable
-              as String?,
-      city: city == freezed
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String?,
-      street: street == freezed
-          ? _value.street
-          : street // ignore: cast_nullable_to_non_nullable
-              as String?,
-      siret: siret == freezed
-          ? _value.siret
-          : siret // ignore: cast_nullable_to_non_nullable
-              as String?,
-      lastName: lastName == freezed
-          ? _value.lastName
-          : lastName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      firstName: firstName == freezed
-          ? _value.firstName
-          : firstName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      userName: userName == freezed
-          ? _value.userName
-          : userName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      likedId: likedId == freezed
-          ? _value._likedId
-          : likedId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      postsNumber: postsNumber == freezed
-          ? _value.postsNumber
-          : postsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      projectsNumber: projectsNumber == freezed
-          ? _value.projectsNumber
-          : projectsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      productsNumber: productsNumber == freezed
-          ? _value.productsNumber
-          : productsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      eventsNumber: eventsNumber == freezed
-          ? _value.eventsNumber
-          : eventsNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      followersNumber: followersNumber == freezed
-          ? _value.followersNumber
-          : followersNumber // ignore: cast_nullable_to_non_nullable
-              as int,
-      followingsId: followingsId == freezed
-          ? _value._followingsId
-          : followingsId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      participatesId: participatesId == freezed
-          ? _value._participatesId
-          : participatesId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      keywords: keywords == freezed
-          ? _value._keywords
-          : keywords // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      image: image == freezed
-          ? _value.image
-          : image // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+      sexe: sexe == freezed
+          ? _value.sexe
+          : sexe // ignore: cast_nullable_to_non_nullable
               as String?,
       registrationDone: registrationDone == freezed
           ? _value.registrationDone
@@ -486,22 +196,14 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.socialRegister
           : socialRegister // ignore: cast_nullable_to_non_nullable
               as bool,
-      notifAllowed: notifAllowed == freezed
-          ? _value.notifAllowed
-          : notifAllowed // ignore: cast_nullable_to_non_nullable
-              as bool,
-      token: token == freezed
-          ? _value.token
-          : token // ignore: cast_nullable_to_non_nullable
-              as String?,
-      usersBlocked: usersBlocked == freezed
-          ? _value._usersBlocked
-          : usersBlocked // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>,
-      blockedBy: blockedBy == freezed
-          ? _value._blockedBy
-          : blockedBy // ignore: cast_nullable_to_non_nullable
-              as Map<dynamic, dynamic>,
+      enterprise: enterprise == freezed
+          ? _value._enterprise
+          : enterprise // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      joinEnterprise: joinEnterprise == freezed
+          ? _value._joinEnterprise
+          : joinEnterprise // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -512,43 +214,16 @@ class _$_UserModel implements _UserModel {
   const _$_UserModel(
       {this.id = null,
       this.email = null,
-      this.accountType = null,
-      this.profileType = null,
-      this.socialMedia = null,
-      this.publicPersonality = null,
-      this.shopName = null,
-      this.website = null,
-      this.address = null,
-      this.country = null,
-      this.city = null,
-      this.street = null,
-      this.siret = null,
-      this.lastName = null,
-      this.firstName = null,
-      this.userName = null,
-      final List<String> likedId = const [],
-      this.postsNumber = 0,
-      this.projectsNumber = 0,
-      this.productsNumber = 0,
-      this.eventsNumber = 0,
-      this.followersNumber = 0,
-      final List<String> followingsId = const [],
-      final List<String> participatesId = const [],
-      final List<String> keywords = const [],
-      this.image = null,
-      this.description = null,
+      this.prenom = null,
+      @TimestampConverter() required this.naissance,
+      this.profilePicture = null,
+      this.sexe = null,
       this.registrationDone = false,
       this.socialRegister = false,
-      this.notifAllowed = true,
-      this.token = null,
-      final Map<dynamic, dynamic> usersBlocked = const {},
-      final Map<dynamic, dynamic> blockedBy = const {}})
-      : _likedId = likedId,
-        _followingsId = followingsId,
-        _participatesId = participatesId,
-        _keywords = keywords,
-        _usersBlocked = usersBlocked,
-        _blockedBy = blockedBy;
+      final List<String>? enterprise = null,
+      final List<String>? joinEnterprise = null})
+      : _enterprise = enterprise,
+        _joinEnterprise = joinEnterprise;
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -561,130 +236,45 @@ class _$_UserModel implements _UserModel {
   final String? email;
   @override
   @JsonKey()
-  final String? accountType;
+  final String? prenom;
+  @override
+  @TimestampConverter()
+  final DateTime naissance;
   @override
   @JsonKey()
-  final String? profileType;
+  final String? profilePicture;
   @override
   @JsonKey()
-  final String? socialMedia;
-  @override
-  @JsonKey()
-  final String? publicPersonality;
-  @override
-  @JsonKey()
-  final String? shopName;
-  @override
-  @JsonKey()
-  final String? website;
-  @override
-  @JsonKey()
-  final String? address;
-  @override
-  @JsonKey()
-  final String? country;
-  @override
-  @JsonKey()
-  final String? city;
-  @override
-  @JsonKey()
-  final String? street;
-  @override
-  @JsonKey()
-  final String? siret;
-  @override
-  @JsonKey()
-  final String? lastName;
-  @override
-  @JsonKey()
-  final String? firstName;
-  @override
-  @JsonKey()
-  final String? userName;
-  final List<String> _likedId;
-  @override
-  @JsonKey()
-  List<String> get likedId {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_likedId);
-  }
-
-  @override
-  @JsonKey()
-  final int postsNumber;
-  @override
-  @JsonKey()
-  final int projectsNumber;
-  @override
-  @JsonKey()
-  final int productsNumber;
-  @override
-  @JsonKey()
-  final int eventsNumber;
-  @override
-  @JsonKey()
-  final int followersNumber;
-  final List<String> _followingsId;
-  @override
-  @JsonKey()
-  List<String> get followingsId {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_followingsId);
-  }
-
-  final List<String> _participatesId;
-  @override
-  @JsonKey()
-  List<String> get participatesId {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_participatesId);
-  }
-
-  final List<String> _keywords;
-  @override
-  @JsonKey()
-  List<String> get keywords {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_keywords);
-  }
-
-  @override
-  @JsonKey()
-  final String? image;
-  @override
-  @JsonKey()
-  final String? description;
+  final String? sexe;
   @override
   @JsonKey()
   final bool registrationDone;
   @override
   @JsonKey()
   final bool socialRegister;
+  final List<String>? _enterprise;
   @override
   @JsonKey()
-  final bool notifAllowed;
-  @override
-  @JsonKey()
-  final String? token;
-  final Map<dynamic, dynamic> _usersBlocked;
-  @override
-  @JsonKey()
-  Map<dynamic, dynamic> get usersBlocked {
+  List<String>? get enterprise {
+    final value = _enterprise;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_usersBlocked);
+    return EqualUnmodifiableListView(value);
   }
 
-  final Map<dynamic, dynamic> _blockedBy;
+  final List<String>? _joinEnterprise;
   @override
   @JsonKey()
-  Map<dynamic, dynamic> get blockedBy {
+  List<String>? get joinEnterprise {
+    final value = _joinEnterprise;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_blockedBy);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, accountType: $accountType, profileType: $profileType, socialMedia: $socialMedia, publicPersonality: $publicPersonality, shopName: $shopName, website: $website, address: $address, country: $country, city: $city, street: $street, siret: $siret, lastName: $lastName, firstName: $firstName, userName: $userName, likedId: $likedId, postsNumber: $postsNumber, projectsNumber: $projectsNumber, productsNumber: $productsNumber, eventsNumber: $eventsNumber, followersNumber: $followersNumber, followingsId: $followingsId, participatesId: $participatesId, keywords: $keywords, image: $image, description: $description, registrationDone: $registrationDone, socialRegister: $socialRegister, notifAllowed: $notifAllowed, token: $token, usersBlocked: $usersBlocked, blockedBy: $blockedBy)';
+    return 'UserModel(id: $id, email: $email, prenom: $prenom, naissance: $naissance, profilePicture: $profilePicture, sexe: $sexe, registrationDone: $registrationDone, socialRegister: $socialRegister, enterprise: $enterprise, joinEnterprise: $joinEnterprise)';
   }
 
   @override
@@ -694,94 +284,35 @@ class _$_UserModel implements _UserModel {
             other is _$_UserModel &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.email, email) &&
+            const DeepCollectionEquality().equals(other.prenom, prenom) &&
+            const DeepCollectionEquality().equals(other.naissance, naissance) &&
             const DeepCollectionEquality()
-                .equals(other.accountType, accountType) &&
-            const DeepCollectionEquality()
-                .equals(other.profileType, profileType) &&
-            const DeepCollectionEquality()
-                .equals(other.socialMedia, socialMedia) &&
-            const DeepCollectionEquality()
-                .equals(other.publicPersonality, publicPersonality) &&
-            const DeepCollectionEquality().equals(other.shopName, shopName) &&
-            const DeepCollectionEquality().equals(other.website, website) &&
-            const DeepCollectionEquality().equals(other.address, address) &&
-            const DeepCollectionEquality().equals(other.country, country) &&
-            const DeepCollectionEquality().equals(other.city, city) &&
-            const DeepCollectionEquality().equals(other.street, street) &&
-            const DeepCollectionEquality().equals(other.siret, siret) &&
-            const DeepCollectionEquality().equals(other.lastName, lastName) &&
-            const DeepCollectionEquality().equals(other.firstName, firstName) &&
-            const DeepCollectionEquality().equals(other.userName, userName) &&
-            const DeepCollectionEquality().equals(other._likedId, _likedId) &&
-            const DeepCollectionEquality()
-                .equals(other.postsNumber, postsNumber) &&
-            const DeepCollectionEquality()
-                .equals(other.projectsNumber, projectsNumber) &&
-            const DeepCollectionEquality()
-                .equals(other.productsNumber, productsNumber) &&
-            const DeepCollectionEquality()
-                .equals(other.eventsNumber, eventsNumber) &&
-            const DeepCollectionEquality()
-                .equals(other.followersNumber, followersNumber) &&
-            const DeepCollectionEquality()
-                .equals(other._followingsId, _followingsId) &&
-            const DeepCollectionEquality()
-                .equals(other._participatesId, _participatesId) &&
-            const DeepCollectionEquality().equals(other._keywords, _keywords) &&
-            const DeepCollectionEquality().equals(other.image, image) &&
-            const DeepCollectionEquality()
-                .equals(other.description, description) &&
+                .equals(other.profilePicture, profilePicture) &&
+            const DeepCollectionEquality().equals(other.sexe, sexe) &&
             const DeepCollectionEquality()
                 .equals(other.registrationDone, registrationDone) &&
             const DeepCollectionEquality()
                 .equals(other.socialRegister, socialRegister) &&
             const DeepCollectionEquality()
-                .equals(other.notifAllowed, notifAllowed) &&
-            const DeepCollectionEquality().equals(other.token, token) &&
+                .equals(other._enterprise, _enterprise) &&
             const DeepCollectionEquality()
-                .equals(other._usersBlocked, _usersBlocked) &&
-            const DeepCollectionEquality()
-                .equals(other._blockedBy, _blockedBy));
+                .equals(other._joinEnterprise, _joinEnterprise));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hashAll([
-        runtimeType,
-        const DeepCollectionEquality().hash(id),
-        const DeepCollectionEquality().hash(email),
-        const DeepCollectionEquality().hash(accountType),
-        const DeepCollectionEquality().hash(profileType),
-        const DeepCollectionEquality().hash(socialMedia),
-        const DeepCollectionEquality().hash(publicPersonality),
-        const DeepCollectionEquality().hash(shopName),
-        const DeepCollectionEquality().hash(website),
-        const DeepCollectionEquality().hash(address),
-        const DeepCollectionEquality().hash(country),
-        const DeepCollectionEquality().hash(city),
-        const DeepCollectionEquality().hash(street),
-        const DeepCollectionEquality().hash(siret),
-        const DeepCollectionEquality().hash(lastName),
-        const DeepCollectionEquality().hash(firstName),
-        const DeepCollectionEquality().hash(userName),
-        const DeepCollectionEquality().hash(_likedId),
-        const DeepCollectionEquality().hash(postsNumber),
-        const DeepCollectionEquality().hash(projectsNumber),
-        const DeepCollectionEquality().hash(productsNumber),
-        const DeepCollectionEquality().hash(eventsNumber),
-        const DeepCollectionEquality().hash(followersNumber),
-        const DeepCollectionEquality().hash(_followingsId),
-        const DeepCollectionEquality().hash(_participatesId),
-        const DeepCollectionEquality().hash(_keywords),
-        const DeepCollectionEquality().hash(image),
-        const DeepCollectionEquality().hash(description),
-        const DeepCollectionEquality().hash(registrationDone),
-        const DeepCollectionEquality().hash(socialRegister),
-        const DeepCollectionEquality().hash(notifAllowed),
-        const DeepCollectionEquality().hash(token),
-        const DeepCollectionEquality().hash(_usersBlocked),
-        const DeepCollectionEquality().hash(_blockedBy)
-      ]);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(email),
+      const DeepCollectionEquality().hash(prenom),
+      const DeepCollectionEquality().hash(naissance),
+      const DeepCollectionEquality().hash(profilePicture),
+      const DeepCollectionEquality().hash(sexe),
+      const DeepCollectionEquality().hash(registrationDone),
+      const DeepCollectionEquality().hash(socialRegister),
+      const DeepCollectionEquality().hash(_enterprise),
+      const DeepCollectionEquality().hash(_joinEnterprise));
 
   @JsonKey(ignore: true)
   @override
@@ -800,37 +331,14 @@ abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {final String? id,
       final String? email,
-      final String? accountType,
-      final String? profileType,
-      final String? socialMedia,
-      final String? publicPersonality,
-      final String? shopName,
-      final String? website,
-      final String? address,
-      final String? country,
-      final String? city,
-      final String? street,
-      final String? siret,
-      final String? lastName,
-      final String? firstName,
-      final String? userName,
-      final List<String> likedId,
-      final int postsNumber,
-      final int projectsNumber,
-      final int productsNumber,
-      final int eventsNumber,
-      final int followersNumber,
-      final List<String> followingsId,
-      final List<String> participatesId,
-      final List<String> keywords,
-      final String? image,
-      final String? description,
+      final String? prenom,
+      @TimestampConverter() required final DateTime naissance,
+      final String? profilePicture,
+      final String? sexe,
       final bool registrationDone,
       final bool socialRegister,
-      final bool notifAllowed,
-      final String? token,
-      final Map<dynamic, dynamic> usersBlocked,
-      final Map<dynamic, dynamic> blockedBy}) = _$_UserModel;
+      final List<String>? enterprise,
+      final List<String>? joinEnterprise}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
@@ -840,67 +348,22 @@ abstract class _UserModel implements UserModel {
   @override
   String? get email;
   @override
-  String? get accountType;
+  String? get prenom;
   @override
-  String? get profileType;
+  @TimestampConverter()
+  DateTime get naissance;
   @override
-  String? get socialMedia;
+  String? get profilePicture;
   @override
-  String? get publicPersonality;
-  @override
-  String? get shopName;
-  @override
-  String? get website;
-  @override
-  String? get address;
-  @override
-  String? get country;
-  @override
-  String? get city;
-  @override
-  String? get street;
-  @override
-  String? get siret;
-  @override
-  String? get lastName;
-  @override
-  String? get firstName;
-  @override
-  String? get userName;
-  @override
-  List<String> get likedId;
-  @override
-  int get postsNumber;
-  @override
-  int get projectsNumber;
-  @override
-  int get productsNumber;
-  @override
-  int get eventsNumber;
-  @override
-  int get followersNumber;
-  @override
-  List<String> get followingsId;
-  @override
-  List<String> get participatesId;
-  @override
-  List<String> get keywords;
-  @override
-  String? get image;
-  @override
-  String? get description;
+  String? get sexe;
   @override
   bool get registrationDone;
   @override
   bool get socialRegister;
   @override
-  bool get notifAllowed;
+  List<String>? get enterprise;
   @override
-  String? get token;
-  @override
-  Map<dynamic, dynamic> get usersBlocked;
-  @override
-  Map<dynamic, dynamic> get blockedBy;
+  List<String>? get joinEnterprise;
   @override
   @JsonKey(ignore: true)
   _$$_UserModelCopyWith<_$_UserModel> get copyWith =>

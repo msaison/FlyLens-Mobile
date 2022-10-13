@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../config.dart';
 
 class Button extends StatelessWidget {
   final double? height;
@@ -49,16 +51,17 @@ class Button extends StatelessWidget {
     return Material(
       type: MaterialType.transparency,
       child: Opacity(
-        opacity: isEnabled == null
-            ? 1
-            : isEnabled!
+        opacity: isEnabled != null
+            ? isEnabled!
                 ? 1
-                : 0.5,
+                : 0.3
+            : 1,
         child: Container(
           height: height ?? 54,
           width: width ?? double.infinity,
           decoration: BoxDecoration(
-              color: gradient != null ? null : backgroundColor ?? Theme.of(context).primaryColor,
+              color:
+                  border == null ? (gradient != null ? null : backgroundColor ?? Theme.of(context).primaryColor) : null,
               gradient: gradient,
               borderRadius: BorderRadius.circular(radius ?? 7),
               border: border),
@@ -70,8 +73,11 @@ class Button extends StatelessWidget {
               borderRadius: BorderRadius.circular(radius ?? 7),
               child: loading
                   ? Center(
-                      child: SpinKitWave(
-                        color: Color(0xff033323),
+                      child: Transform.scale(
+                        scale: 0.5,
+                        child: SpinKitWave(
+                          color: Colors.white,
+                        ),
                       ),
                     )
                   : child ??
@@ -106,14 +112,94 @@ class Button extends StatelessWidget {
                             )
                           : Transform.scale(
                               scale: 0.6,
-                              child: const SpinKitWave(
-                                color: Color(0xff033323),
+                              child: SpinKitWave(
+                                color: AppColor.primaryColor,
                               ),
                             )),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class BackButtonUpdated extends StatelessWidget {
+  final Color? backgroundColor;
+  final VoidCallback? onTap;
+  final Color iconColor;
+  const BackButtonUpdated({
+    this.backgroundColor,
+    this.onTap,
+    this.iconColor = Colors.white,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+        type: MaterialType.transparency,
+        child: Container(
+            height: 46,
+            width: 46,
+            decoration: BoxDecoration(
+                color: backgroundColor ?? AppColor.primaryColor, borderRadius: BorderRadius.circular(14.r)),
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                splashColor: backgroundColor != null
+                    ? backgroundColor!.withOpacity(0.38)
+                    : AppColor.primaryColor.withOpacity(0.38),
+                borderRadius: BorderRadius.circular(14.r),
+                onTap: onTap,
+                child: Icon(Icons.arrow_back_ios_new_rounded, color: iconColor),
+              ),
+            )));
+  }
+}
+
+class TextButtonUpdated extends StatelessWidget {
+  final String clicktextButton;
+  final String? text;
+  final Color? textColor;
+  final TextStyle? textStyle;
+  final Color? textClickColor;
+  final TextStyle? textClickStyle;
+  final VoidCallback? onTap;
+  const TextButtonUpdated({
+    this.clicktextButton = 'Button',
+    this.text,
+    this.textColor,
+    this.textStyle,
+    this.textClickColor,
+    this.textClickStyle,
+    this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        text != null ? Text(
+          text!,
+          style: textStyle ??
+              TextStyle(color: textColor ?? AppColor.fiveColor, fontSize: 13.sp, fontWeight: FontWeight.w500),
+        ) : SizedBox(),
+        InkWell(
+          onTap: onTap,
+          child: Text(
+            clicktextButton,
+            style: textClickStyle ??
+                TextStyle(
+                    color: textClickColor ?? AppColor.primaryColor,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline),
+          ),
+        ),
+      ],
     );
   }
 }
