@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flylens/components/alerttoast.dart';
 import 'package:flylens/config.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -23,26 +24,44 @@ class AuthHelper {
     }
   }
 
-  static Future<UserCredential?> signInWithEmail(String email, String password) async {
+  static Future<UserCredential?> signInWithEmail(String email, String password, FToast fToast) async {
     try {
       UserCredential result =
           await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.trim(), password: password);
       return result;
     } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(
-          msg: 'Error: ${e.message}', gravity: ToastGravity.TOP, backgroundColor: AppColor.errorColor);
+      fToast.showToast(
+          gravity: ToastGravity.TOP,
+          child: alertToast(message: 'Error: ${e.message}'),
+          positionedToastBuilder: (context, child) {
+            return Positioned(
+              child: child,
+              top: 40,
+              left: 20,
+              right: 20,
+            );
+          });
       return null;
     }
   }
 
-  static Future<UserCredential?> signUpWithEmail(String email, String password) async {
+  static Future<UserCredential?> signUpWithEmail(String email, String password, FToast fToast) async {
     try {
       UserCredential result =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email.trim(), password: password);
       return result;
     } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(
-          msg: 'Error: ${e.message}', gravity: ToastGravity.TOP, backgroundColor: AppColor.errorColor);
+      fToast.showToast(
+          gravity: ToastGravity.TOP,
+          child: alertToast(message: 'Error: ${e.message}'),
+          positionedToastBuilder: (context, child) {
+            return Positioned(
+              child: child,
+              top: 40,
+              left: 20,
+              right: 20,
+            );
+          });
       return null;
     }
   }

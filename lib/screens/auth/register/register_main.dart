@@ -13,6 +13,7 @@ import 'package:flylens/components/form_fields.dart';
 import 'package:flylens/components/header.dart';
 import 'package:flylens/config.dart';
 import 'package:flylens/main.dart';
+import '../../../components/alerttoast.dart';
 import '../../../helper.dart';
 
 class RegisterMain extends StatefulWidget {
@@ -121,6 +122,7 @@ class _RegisterMainState extends State<RegisterMain> {
                                 if (passwordStrength != 1) {
                                   return '';
                                 }
+                                return null;
                               },
                               onChanged: (value) {
                                 setState(() {
@@ -203,8 +205,8 @@ class _RegisterMainState extends State<RegisterMain> {
                                 setState(() {
                                   loading = true;
                                 });
-                                UserCredential? account =
-                                    await AuthHelper.signUpWithEmail(emailController!.text, passwordController!.text);
+                                UserCredential? account = await AuthHelper.signUpWithEmail(
+                                    emailController!.text, passwordController!.text, fToast);
                                 if (account != null) {
                                   bool exist = await AuthHelper.existDocWithId(COLLECTION_USER, account.user!.uid);
                                   if (!exist) {
@@ -221,10 +223,17 @@ class _RegisterMainState extends State<RegisterMain> {
                                   Navigator.pushAndRemoveUntil(
                                       context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
                                 } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'Aborted connection, please try again.',
+                                  fToast.showToast(
                                       gravity: ToastGravity.TOP,
-                                      backgroundColor: AppColor.errorColor);
+                                      child: alertToast(message: 'Aborted connection, please try again.'),
+                                      positionedToastBuilder: (context, child) {
+                                        return Positioned(
+                                          child: child,
+                                          top: 40,
+                                          left: 20,
+                                          right: 20,
+                                        );
+                                      });
                                 }
                               }
                             }),
@@ -266,10 +275,17 @@ class _RegisterMainState extends State<RegisterMain> {
                                           Navigator.pushAndRemoveUntil(
                                               context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
                                         } else {
-                                          Fluttertoast.showToast(
-                                              msg: 'Aborted connection, please try again.',
+                                          fToast.showToast(
                                               gravity: ToastGravity.TOP,
-                                              backgroundColor: AppColor.errorColor);
+                                              child: alertToast(message: 'Aborted connection, please try again.'),
+                                              positionedToastBuilder: (context, child) {
+                                                return Positioned(
+                                                  child: child,
+                                                  top: 40,
+                                                  left: 20,
+                                                  right: 20,
+                                                );
+                                              });
                                         }
                                       },
                                       child: Padding(

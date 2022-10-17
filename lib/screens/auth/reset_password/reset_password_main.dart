@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flylens/components/auth_service.dart';
+import 'package:flylens/components/alerttoast.dart';
 import 'package:flylens/components/button.dart';
 import 'package:flylens/components/form_fields.dart';
 import 'package:flylens/components/header.dart';
@@ -19,9 +18,16 @@ class ResetPasswordMain extends StatefulWidget {
 
 class _ResetPasswordMainState extends State<ResetPasswordMain> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_formKEy');
+  FToast fToast = FToast();
   final TextEditingController? emailController = TextEditingController();
   final FocusNode? emailFocus = FocusNode();
   bool loading = false;
+
+  @override
+  void initState() {
+    fToast.init(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,15 +107,30 @@ class _ResetPasswordMainState extends State<ResetPasswordMain> {
                               setState(() {
                                 loading = false;
                               });
-                              Fluttertoast.showToast(
-                                  msg: 'Email envoyé verifié vos spam!',
+                              fToast.showToast(
                                   gravity: ToastGravity.TOP,
-                                  backgroundColor: AppColor.successColor);
+                                  child: alertToast(message: 'Email envoyé verifié vos spam!', success: true),
+                                  positionedToastBuilder: (context, child) {
+                                    return Positioned(
+                                      child: child,
+                                      top: 40,
+                                      left: 20,
+                                      right: 20,
+                                    );
+                                  });
+                              Navigator.of(context).pop();
                             } on FirebaseAuthException catch (e) {
-                              Fluttertoast.showToast(
-                                  msg: 'Error: ${e.message}',
+                              fToast.showToast(
                                   gravity: ToastGravity.TOP,
-                                  backgroundColor: AppColor.errorColor);
+                                  child: alertToast(message: 'Error: ${e.message}'),
+                                  positionedToastBuilder: (context, child) {
+                                    return Positioned(
+                                      child: child,
+                                      top: 40,
+                                      left: 20,
+                                      right: 20,
+                                    );
+                                  });
                             }
                           }
                         },

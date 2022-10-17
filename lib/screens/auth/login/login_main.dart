@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flylens/components/alerttoast.dart';
 import 'package:flylens/components/auth_service.dart';
 import 'package:flylens/components/button.dart';
 import 'package:flylens/components/form_fields.dart';
@@ -23,6 +24,7 @@ class LoginMain extends StatefulWidget {
 
 class _LoginMainState extends State<LoginMain> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_formKEy');
+  FToast fToast = FToast();
   ScrollController? _scrollController = ScrollController();
   TextEditingController? passwordController = TextEditingController();
   TextEditingController? emailController = TextEditingController();
@@ -33,6 +35,7 @@ class _LoginMainState extends State<LoginMain> {
 
   @override
   void initState() {
+    fToast.init(context);
     super.initState();
   }
 
@@ -150,8 +153,8 @@ class _LoginMainState extends State<LoginMain> {
                               setState(() {
                                 loading = true;
                               });
-                              UserCredential? account =
-                                  await AuthHelper.signInWithEmail(emailController!.text, passwordController!.text);
+                              UserCredential? account = await AuthHelper.signInWithEmail(
+                                  emailController!.text, passwordController!.text, fToast);
                               if (account != null) {
                                 Navigator.pushAndRemoveUntil(
                                     context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
@@ -160,10 +163,17 @@ class _LoginMainState extends State<LoginMain> {
                                   loading = false;
                                 });
                                 Future.delayed(Duration(seconds: 2), () {
-                                  Fluttertoast.showToast(
-                                      msg: 'Aborted connection, please try again.',
+                                  fToast.showToast(
                                       gravity: ToastGravity.TOP,
-                                      backgroundColor: AppColor.errorColor);
+                                      child: alertToast(message: 'Aborted connection, please try again.'),
+                                      positionedToastBuilder: (context, child) {
+                                        return Positioned(
+                                          child: child,
+                                          top: 40,
+                                          left: 20,
+                                          right: 20,
+                                        );
+                                      });
                                 });
                               }
                             }
@@ -207,10 +217,17 @@ class _LoginMainState extends State<LoginMain> {
                                           Navigator.pushAndRemoveUntil(
                                               context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
                                         } else {
-                                          Fluttertoast.showToast(
-                                              msg: 'Aborted connection, please try again.',
+                                          fToast.showToast(
                                               gravity: ToastGravity.TOP,
-                                              backgroundColor: AppColor.errorColor);
+                                              child: alertToast(message: 'Aborted connection, please try again.'),
+                                              positionedToastBuilder: (context, child) {
+                                                return Positioned(
+                                                  child: child,
+                                                  top: 40,
+                                                  left: 20,
+                                                  right: 20,
+                                                );
+                                              });
                                         }
                                       },
                                       child: Padding(
