@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flylens/components/alerttoast.dart';
+import 'package:flylens/components/alert_toast.dart';
 import 'package:flylens/components/auth_service.dart';
 import 'package:flylens/components/button.dart';
 import 'package:flylens/components/form_fields.dart';
