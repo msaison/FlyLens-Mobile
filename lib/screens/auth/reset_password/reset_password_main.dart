@@ -66,7 +66,7 @@ class _ResetPasswordMainState extends State<ResetPasswordMain> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Pour réinitialiser votre mot de passe, renseignez l'adresse email avec laquelle vous vous êtes inscrit.",
+                          "Pour réinitialiser votre mot de passe, renseignez l'adresse e-mail avec laquelle vous vous êtes inscrit.",
                           textAlign: TextAlign.center,
                           maxLines: 3,
                           style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w600),
@@ -78,8 +78,8 @@ class _ResetPasswordMainState extends State<ResetPasswordMain> {
                         focusNode: emailFocus,
                         textInputAction: TextInputAction.next,
                         textInputType: TextInputType.emailAddress,
-                        fieldName: "Adresse email",
-                        hintText: "john.doe@gmail.com",
+                        fieldName: "Entrez votre adresse e-mail",
+                        hintText: "Adresse e-mail",
                         validator: (value) {
                           if (value != null) {
                             if (value.isEmpty) {

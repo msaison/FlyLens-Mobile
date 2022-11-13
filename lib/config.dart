@@ -83,6 +83,8 @@ abstract class AppTheme {
 //////////////////////////////////////////////////////////////////////////////
 
 abstract class AppColor {
+  static Color backgroundColor = Color(0xFFF3F0EF);
+  static Color lightprimaryColor = Color(0xFF4CA063);
   static Color primaryColor = Color(0xFF033323);
   static Color fiveColor = Color.fromARGB(255, 109, 136, 126);
   static Color errorColor = Color(0xFFFF3333);

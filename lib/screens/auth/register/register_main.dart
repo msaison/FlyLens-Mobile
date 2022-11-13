@@ -89,8 +89,8 @@ class _RegisterMainState extends State<RegisterMain> {
                           nextFocusNode: passwordNode,
                           textInputAction: TextInputAction.next,
                           textInputType: TextInputType.emailAddress,
-                          fieldName: "Adresse email",
-                          hintText: "john.doe@gmail.com",
+                          fieldName: "Quelle est votre adresse e-mail ?",
+                          hintText: "Entrez votre adresse e-mail",
                           validator: (value) {
                             if (value != null) {
                               if (value.isEmpty) {
@@ -134,7 +134,7 @@ class _RegisterMainState extends State<RegisterMain> {
                                     (haveSym ? 0.25 : 0) +
                                     (haveNumber ? 0.25 : 0));
                               },
-                              fieldName: "Mot de passe",
+                              fieldName: "Créer un mot de passe",
                               hintText: "Mot de passe",
                               suffixChildBoxConstraint: BoxConstraints(minWidth: 50.w),
                               suffixChild: Ink(
@@ -169,8 +169,8 @@ class _RegisterMainState extends State<RegisterMain> {
                             }
                             return null;
                           },
-                          fieldName: "Confirmation mot de passe",
-                          hintText: "Confirmation mot de passe",
+                          fieldName: "Confirmer votre mot de passe",
+                          hintText: "Mot de passe",
                           suffixChildBoxConstraint: BoxConstraints(minWidth: 50.w),
                           suffixChild: Ink(
                             child: IconButton(
@@ -319,6 +319,7 @@ class _RegisterMainState extends State<RegisterMain> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 40.h),
                       ],
                     ),
                   ),

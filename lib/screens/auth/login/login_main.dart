@@ -79,8 +79,8 @@ class _LoginMainState extends State<LoginMain> {
                           nextFocusNode: passwordFocus,
                           textInputAction: TextInputAction.next,
                           textInputType: TextInputType.emailAddress,
-                          fieldName: "Adresse email",
-                          hintText: "john.doe@gmail.com",
+                          fieldName: "Entrez votre adresse e-mail",
+                          hintText: "Adresse e-mail",
                           validator: (value) {
                             if (value != null) {
                               if (value.isEmpty) {
@@ -101,7 +101,7 @@ class _LoginMainState extends State<LoginMain> {
                           textInputAction: TextInputAction.next,
                           textInputType: TextInputType.visiblePassword,
                           obscuringText: passwordObscuring,
-                          fieldName: "Mot de passe",
+                          fieldName: "Entrez votre mot de passe",
                           hintText: "Mot de passe",
                           validator: (value) {
                             if (value != null) {
@@ -194,70 +194,8 @@ class _LoginMainState extends State<LoginMain> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 5.0.w),
-                                  child: TextButton(
-                                      onPressed: () async {
-                                        UserCredential? account = await AuthHelper.signInWithGoogle();
-                                        if (account != null) {
-                                          bool exist =
-                                              await AuthHelper.existDocWithId(COLLECTION_USER, account.user!.uid);
-                                          if (!exist) {
-                                            await FirebaseFirestore.instance
-                                                .collection(COLLECTION_USER)
-                                                .doc(account.user!.uid)
-                                                .set({
-                                              "socialRegister": true,
-                                              "profilePicture": account.user!.photoURL,
-                                              "registrationDone": false,
-                                              "email": account.user!.email,
-                                            });
-                                          }
-                                          Navigator.pushAndRemoveUntil(
-                                              context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
-                                        } else {
-                                          fToast.showToast(
-                                              gravity: ToastGravity.TOP,
-                                              child: alertToast(message: 'Aborted connection, please try again.'),
-                                              positionedToastBuilder: (context, child) {
-                                                return Positioned(
-                                                  child: child,
-                                                  top: 40,
-                                                  left: 20,
-                                                  right: 20,
-                                                );
-                                              });
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 10.h,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/svg/google.svg",
-                                              height: 25.h,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      style: ButtonStyle(
-                                          overlayColor: MaterialStateProperty.resolveWith(
-                                              (states) => Colors.grey.withOpacity(0.3)),
-                                          backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.white),
-                                          shape:
-                                              MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                color: Colors.black.withOpacity(0.25),
-                                                width: 0.5,
-                                                style: BorderStyle.solid),
-                                            borderRadius: BorderRadius.circular(7),
-                                          )))),
-                                ),
-                              ),
+                              GoogleSignInButton(fToast: fToast),
+                              FacebookSignInButton(fToast: fToast)
                             ],
                           ),
                         ),
@@ -284,6 +222,161 @@ class _LoginMainState extends State<LoginMain> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class GoogleSignInButton extends StatelessWidget {
+  const GoogleSignInButton({
+    Key? key,
+    required this.fToast,
+  }) : super(key: key);
+
+  final FToast fToast;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5.0.w),
+        child: TextButton(
+            onPressed: () async {
+              UserCredential? account = await AuthHelper.signInWithGoogle();
+              if (account != null) {
+                bool exist =
+                    await AuthHelper.existDocWithId(COLLECTION_USER, account.user!.uid);
+                if (!exist) {
+                  await FirebaseFirestore.instance
+                      .collection(COLLECTION_USER)
+                      .doc(account.user!.uid)
+                      .set({
+                    "socialRegister": true,
+                    "profilePicture": account.user!.photoURL,
+                    "registrationDone": false,
+                    "email": account.user!.email,
+                  });
+                }
+                Navigator.pushAndRemoveUntil(
+                    context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
+              } else {
+                fToast.showToast(
+                    gravity: ToastGravity.TOP,
+                    child: alertToast(message: 'Aborted connection, please try again.'),
+                    positionedToastBuilder: (context, child) {
+                      return Positioned(
+                        child: child,
+                        top: 40,
+                        left: 20,
+                        right: 20,
+                      );
+                    });
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 10.h,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/svg/google.svg",
+                    height: 25.h,
+                  ),
+                ],
+              ),
+            ),
+            style: ButtonStyle(
+                overlayColor: MaterialStateProperty.resolveWith(
+                    (states) => Colors.grey.withOpacity(0.3)),
+                backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.white),
+                shape:
+                    MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.black.withOpacity(0.25),
+                      width: 0.5,
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(7),
+                )))),
+      ),
+    );
+  }
+}
+
+
+class FacebookSignInButton extends StatelessWidget {
+  const FacebookSignInButton({
+    Key? key,
+    required this.fToast,
+  }) : super(key: key);
+
+  final FToast fToast;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5.0.w),
+        child: TextButton(
+            onPressed: () async {
+              UserCredential? account = await AuthHelper.signInWithGoogle();
+              if (account != null) {
+                bool exist =
+                    await AuthHelper.existDocWithId(COLLECTION_USER, account.user!.uid);
+                if (!exist) {
+                  await FirebaseFirestore.instance
+                      .collection(COLLECTION_USER)
+                      .doc(account.user!.uid)
+                      .set({
+                    "socialRegister": true,
+                    "profilePicture": account.user!.photoURL,
+                    "registrationDone": false,
+                    "email": account.user!.email,
+                  });
+                }
+                Navigator.pushAndRemoveUntil(
+                    context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
+              } else {
+                fToast.showToast(
+                    gravity: ToastGravity.TOP,
+                    child: alertToast(message: 'Aborted connection, please try again.'),
+                    positionedToastBuilder: (context, child) {
+                      return Positioned(
+                        child: child,
+                        top: 40,
+                        left: 20,
+                        right: 20,
+                      );
+                    });
+              }
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 10.h,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/svg/google.svg",
+                    height: 25.h,
+                  ),
+                ],
+              ),
+            ),
+            style: ButtonStyle(
+                overlayColor: MaterialStateProperty.resolveWith(
+                    (states) => Colors.grey.withOpacity(0.3)),
+                backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.white),
+                shape:
+                    MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.black.withOpacity(0.25),
+                      width: 0.5,
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(7),
+                )))),
       ),
     );
   }

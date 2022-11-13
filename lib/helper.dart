@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 extension extString on String {
   bool get isValidEmail {
@@ -16,7 +17,7 @@ extension extString on String {
     return passwordRegExp.hasMatch(this);
   }
 
-   bool get isStrongPassword {
+  bool get isStrongPassword {
     final passwordRegExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\><*~]).{8,}/pre>');
     return passwordRegExp.hasMatch(this);
   }
@@ -68,3 +69,9 @@ Widget inkWell({
         ),
       ),
     );
+
+const _chars = '1234567890';
+Random _rnd = Random();
+
+String getRandomCode(int length) =>
+    String.fromCharCodes(Iterable.generate(length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));

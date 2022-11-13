@@ -69,14 +69,11 @@ class _SettingsMainState extends State<SettingsMain> {
                               height: 0.5, width: double.infinity, color: AppColor.primaryColor.withOpacity(0.14)),
                           SingleChildScrollView(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              SettingsCellule(
-                                icon: Icons.business_center_rounded,
-                                text: 'Votre entreprise',
-                                miniText: 'Gestion employer, Gestion drone, Gestion champs, ect...',
-                                onTap: () {
-                                  print('gestion');
-                                },
-                              ),
+                              user.enterprise == null
+                                  ? SizedBox()
+                                  : (user.enterprise!.length > 0)
+                                      ? ModifYourEnterprise()
+                                      : SizedBox(),
                               user.enterprise == null
                                   ? CreateAnEnterprise()
                                   : (user.enterprise!.length > 0)
