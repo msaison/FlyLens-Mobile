@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flylens/components/button.dart';
 import 'package:flylens/components/form_fields.dart';
 import 'package:flylens/components/header.dart';
 import 'package:flylens/config.dart';
+import 'package:flylens/main.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,7 +21,7 @@ class ScanMain extends StatefulWidget {
 }
 
 class _ScanMainState extends State<ScanMain> {
-  Barcode? result;
+  // Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final String hintUuid = Uuid().v4();
@@ -59,6 +62,12 @@ class _ScanMainState extends State<ScanMain> {
                     child: TextFormUpdated.classic(
                       fieldNameStyle: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w500),
                       backgroundColor: Colors.white,
+                      onChanged: (text) {
+                        if (text.length == 36) {
+                          _onCodeSubmit(controller: this.controller!, code: text);
+                          FocusScope.of(context).unfocus();
+                        }
+                      },
                       hintText: 'Ex. $hintUuid',
                       hintTextStyle: TextStyle(
                           color: AppColor.primaryColor.withOpacity(0.66), fontSize: 12.sp, fontWeight: FontWeight.w500),
@@ -89,17 +98,13 @@ class _ScanMainState extends State<ScanMain> {
           Padding(
             padding: EdgeInsets.only(bottom: 100.h),
             child: Align(
-              alignment: Alignment.bottomCenter,
-              child: InkWell(
-                onTap: () async {
-                  await controller?.toggleFlash();
-                  setState(() {});
-                },
-                child: Container(
-                  height: 72.h,
-                  width: 72.w,
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                  child: FutureBuilder(
+                alignment: Alignment.bottomCenter,
+                child: CircleButton(
+                  onTap: () async {
+                    await controller?.toggleFlash();
+                    setState(() {});
+                  },
+                  widget: FutureBuilder(
                       future: controller?.getFlashStatus(),
                       builder: (context, AsyncSnapshot<bool?> snapshot) {
                         if (snapshot.hasData && !snapshot.hasError) {
@@ -114,9 +119,7 @@ class _ScanMainState extends State<ScanMain> {
                           );
                         }
                       }),
-                ),
-              ),
-            ),
+                )),
           )
         ],
       ),
@@ -145,37 +148,77 @@ class _ScanMainState extends State<ScanMain> {
     });
 
     controller.scannedDataStream.listen((scanData) async {
-      controller.pauseCamera();
-      showDialog(
-          context: context,
-          builder: ((context) {
-            return AlertDialog(
-              title: Text(
-                'Voulez-vous vraiment rejoindre cette entreprise.',
-                textAlign: TextAlign.center,
-              ),
-              actions: [
-                Button(
-                  textButton: 'Oui',
-                  onTap: () {
-                    print('oui');
-                  },
-                ),
-                Button(
-                  textButton: 'Non',
-                  onTap: () {
-                    controller.resumeCamera();
-                    Navigator.of(context).pop();
-                    print('non');
-                  },
-                ),
-              ],
-            );
-          })).then((value) => controller.resumeCamera());
-      setState(() {
-        result = scanData;
-      });
+      _onCodeSubmit(controller: controller, code: scanData.code!);
+      // controller.pauseCamera();
+      // showDialog(
+      //     context: context,
+      //     builder: ((context) {
+      //       return AlertDialog(
+      //         title: Text(
+      //           'Voulez-vous vraiment rejoindre cette entreprise.',
+      //           textAlign: TextAlign.center,
+      //         ),
+      //         actions: [
+      //           Button(
+      //             textButton: 'Oui',
+      //             onTap: () {
+      //               print('oui');
+      //             },
+      //           ),
+      //           Button(
+      //             textButton: 'Non',
+      //             onTap: () {
+      //               controller.resumeCamera();
+      //               Navigator.of(context).pop();
+      //               print('non');
+      //             },
+      //           ),
+      //         ],
+      //       );
+      //     })).then((value) => controller.resumeCamera());
+      // setState(() {
+      //   // result = scanData;
+      // });
     });
+  }
+
+  void _onCodeSubmit({
+    required QRViewController controller,
+    required String code,
+  }) async {
+    controller.pauseCamera();
+    showDialogIfDocExist(context: context, code: code);
+    // showDialog(
+    //     context: context,
+    //     builder: ((context) {
+    //       return AlertDialog(
+    //         title: Text(
+    //           'Voulez-vous vraiment rejoindre cette entreprise.',
+    //           textAlign: TextAlign.center,
+    //         ),
+    //         actions: [
+    //           Button(
+    //             textButton: 'Oui',
+    //             onTap: () async {
+    //               DocumentSnapshot doc =
+    //                   await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(code).get();
+    //               print(doc["name"]);
+    //             },
+    //           ),
+    //           SizedBox(
+    //             height: 10,
+    //           ),
+    //           Button(
+    //             textButton: 'Non',
+    //             onTap: () {
+    //               controller.resumeCamera();
+    //               Navigator.of(context).pop();
+    //             },
+    //           ),
+    //         ],
+    //       );
+    //     })).then((value) => controller.resumeCamera());
+    setState(() {});
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
@@ -191,5 +234,73 @@ class _ScanMainState extends State<ScanMain> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+
+  showDialogIfDocExist({required BuildContext context, required String code}) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(code).get();
+    if (!doc.exists) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "Désoler, je ne connais pas cette entreprise!",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColor.errorColor),
+              ),
+              actions: [
+                Button(
+                  textButton: 'Revenir',
+                  backgroundColor: AppColor.errorColor,
+                  onTap: () {
+                    controller!.resumeCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Voulez-vous vraiment rejoindre l\'entreprise ${doc["nom"]}.',
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                Button(
+                  textButton: 'Oui',
+                  onTap: () async {
+                    await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(code).update({
+                      "employe": [FirebaseAuth.instance.currentUser!.uid]
+                    });
+                    await FirebaseFirestore.instance
+                        .collection(COLLECTION_USER)
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update({
+                      "enterprise": [code]
+                    });
+
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
+                    // print(doc["name"]);
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Button(
+                  textButton: 'Non',
+                  onTap: () {
+                    controller!.resumeCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+    // await Future.delayed(Duration(microseconds: 1));
   }
 }

@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../config.dart';
 import '../helper.dart';
 
@@ -12,6 +14,8 @@ class SettingsCellule extends StatefulWidget {
   final bool withArrow;
   final Color? textAndIconColor;
   final Function(bool)? onSwitch;
+  final String? svgIcon;
+  final Uri? launchUri;
 
   const SettingsCellule(
       {this.onTap,
@@ -21,6 +25,8 @@ class SettingsCellule extends StatefulWidget {
       this.withArrow = true,
       this.textAndIconColor,
       this.onSwitch,
+      this.svgIcon,
+      this.launchUri,
       Key? key})
       : super(key: key);
 
@@ -34,7 +40,7 @@ class _SettingsCelluleState extends State<SettingsCellule> {
   @override
   Widget build(BuildContext context) {
     return inkWell(
-      onTap: widget.onTap,
+      onTap: widget.launchUri != null ? () => launchURL(widget.launchUri!) : widget.onTap,
       constraints: BoxConstraints(minHeight: 55.h),
       decoration: BoxDecoration(
         color: AppColor.primaryColor.withOpacity(0.03),
@@ -47,11 +53,16 @@ class _SettingsCelluleState extends State<SettingsCellule> {
           children: [
             Row(
               children: [
-                Icon(
-                  widget.icon ?? Icons.block,
-                  color: widget.textAndIconColor ?? AppColor.primaryColor,
-                  size: 21,
-                ),
+                widget.svgIcon != null
+                    ? SvgPicture.asset(
+                        widget.svgIcon!,
+                        fit: BoxFit.none,
+                      )
+                    : Icon(
+                        widget.icon ?? Icons.block,
+                        color: widget.textAndIconColor ?? AppColor.primaryColor,
+                        size: 21,
+                      ),
                 SizedBox(width: 11.w),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   AutoSizeText(
@@ -63,7 +74,7 @@ class _SettingsCelluleState extends State<SettingsCellule> {
                   ),
                   widget.miniText != null
                       ? Text(widget.miniText!,
-                      overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               color: widget.textAndIconColor ?? AppColor.primaryColor,
                               fontSize: 10.sp,
@@ -75,6 +86,7 @@ class _SettingsCelluleState extends State<SettingsCellule> {
             widget.onSwitch != null
                 ? Switch.adaptive(
                     value: switchBool,
+                    activeColor: AppColor.primaryColor,
                     onChanged: ((value) {
                       widget.onSwitch!(value);
                       setState(() {
@@ -95,3 +107,5 @@ class _SettingsCelluleState extends State<SettingsCellule> {
     );
   }
 }
+
+void launchURL(Uri uri) async => await canLaunchUrl(uri) ? await launchUrl(uri) : throw 'Could not launch ${uri.data}';

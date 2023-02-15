@@ -182,11 +182,13 @@ class TextButtonUpdated extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        text != null ? Text(
-          text!,
-          style: textStyle ??
-              TextStyle(color: textColor ?? AppColor.fiveColor, fontSize: 13.sp, fontWeight: FontWeight.w500),
-        ) : SizedBox(),
+        text != null
+            ? Text(
+                text!,
+                style: textStyle ??
+                    TextStyle(color: textColor ?? AppColor.fiveColor, fontSize: 13.sp, fontWeight: FontWeight.w500),
+              )
+            : SizedBox(),
         InkWell(
           onTap: onTap,
           child: Text(
@@ -200,6 +202,24 @@ class TextButtonUpdated extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CircleButton extends StatelessWidget {
+  final VoidCallback? onTap;
+  final Widget? widget;
+  const CircleButton({required this.onTap, this.widget, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+          height: 72.h,
+          width: 72.w,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+          child: widget),
     );
   }
 }

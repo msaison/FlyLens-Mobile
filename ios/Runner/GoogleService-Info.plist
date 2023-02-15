@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>248230918332-lc1tibn5nn72h87gqb6onogu5rkmp1ht.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.248230918332-lc1tibn5nn72h87gqb6onogu5rkmp1ht</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>248230918332-dg2ga7q7nja9h5o2rjf1oicih251ttln.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAnQJ-eA1dreLbYUHTXi8W4Y5cKGHZ9L84</string>
+	<key>GCM_SENDER_ID</key>
+	<string>248230918332</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.flylens.mobile</string>
+	<key>PROJECT_ID</key>
+	<string>flylens</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flylens.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:248230918332:ios:25c1043bd105f24e08f8b9</string>
+	<key>DATABASE_URL</key>
+	<string>https://flylens-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>

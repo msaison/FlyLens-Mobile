@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 //////////////////////////////////////////////////////////////////////////////
 
 const WEATHER_API = '5ced979135b6774c501086f1aba2b0c4';
+const GOOGLE_PLACES_API = 'AIzaSyA0bcyPfJOs9KldCK-0NBXsfTaLBxdr7bE';
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -86,6 +87,7 @@ abstract class AppColor {
   static Color backgroundColor = Color(0xFFF3F0EF);
   static Color lightprimaryColor = Color(0xFF4CA063);
   static Color primaryColor = Color(0xFF033323);
+  static Color darkprimaryColor = Color.fromARGB(255, 1, 23, 16);
   static Color fiveColor = Color.fromARGB(255, 109, 136, 126);
   static Color errorColor = Color(0xFFFF3333);
   static Color successColor = Colors.green;

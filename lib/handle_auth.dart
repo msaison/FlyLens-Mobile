@@ -42,7 +42,12 @@ Future<Widget?> handleAuth({
       DocumentSnapshot doc =
           await FirebaseFirestore.instance.collection(redirections.keys.first).doc(currentUser.uid).get();
       if (doc.get("registrationDone") == true) {
-        return redirections.values.first.homePage;
+        Map<String, dynamic> _doc = doc.data() as Map<String, dynamic>;
+        if (_doc["enterprise"] == null || doc.get("enterprise").length <= 0) {
+          return redirections.values.first.entreprise;
+        } else {
+          return redirections.values.first.homePage;
+        }
       } else {
         if (doc.get("socialRegister") == true) {
           return redirections.values.first.socialRegister;
@@ -58,10 +63,12 @@ Future<Widget?> handleAuth({
 class RedirectionHandle {
   Widget normalRegister;
   Widget? socialRegister;
+  Widget entreprise;
   Widget homePage;
   RedirectionHandle({
     required this.normalRegister,
     required this.homePage,
+    required this.entreprise,
     this.socialRegister,
   });
 }

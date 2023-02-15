@@ -1,5 +1,6 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flylens/screens/auth/join_or_create_enterprise.dart';
 import 'package:flylens/screens/bottom_bar/main_bottom_bar.dart';
 import 'config.dart';
 import 'handle_auth.dart';
@@ -44,7 +45,10 @@ class _MyAppState extends State<MyApp> {
                       future: handleAuth(
                         redirections: {
                           COLLECTION_USER: RedirectionHandle(
-                              homePage: MainBottomBar(), normalRegister: FormUser(), socialRegister: FormUser()),
+                              homePage: MainBottomBar(),
+                              normalRegister: FormUser(),
+                              socialRegister: FormUser(),
+                              entreprise: JoinOrCreateEnterprise()),
                         },
                         firstPage: Scaffold(
                           body: SpinKitHourGlass(color: AppColor.primaryColor),
@@ -61,6 +65,7 @@ class _MyAppState extends State<MyApp> {
                             body: Center(
                                 child: SpinKitWave(
                               color: AppColor.primaryColor,
+                              // AppColor.primaryColor,
                             )),
                           );
                         }

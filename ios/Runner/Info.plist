@@ -16,6 +16,11 @@
 	<string>FlyLens</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>sms</string>
+  		<string>tel</string>
+	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
@@ -24,6 +29,17 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access to scan QR codes</string>
+	<key>FacebookAppID</key>
+	<string>487575530028810</string>
+	<key>FacebookClientToken</key>
+	<string>22e494c7c3846d3e78d5c541fae199b7</string>
+	<key>FacebookDisplayName</key>
+	<string>FlyLens</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>fbapi</string>
+  		<string>fb-messenger-share-api</string>
+	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -31,15 +47,9 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.flylens.mobile</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
 				<string>com.googleusercontent.apps.248230918332-lc1tibn5nn72h87gqb6onogu5rkmp1ht</string>
+				<string>com.flylens.mobile</string>
+      			<string>fb487575530028810</string>
 			</array>
 		</dict>
 	</array>

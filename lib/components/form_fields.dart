@@ -2,6 +2,8 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flylens/helper.dart';
+import 'package:google_place/google_place.dart';
 import '../config.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
@@ -181,6 +183,7 @@ class TextFormUpdated extends StatelessWidget {
     final TextStyle? fieldNameStyle,
     final TextStyle? hintTextStyle,
     final TextStyle? textStyle,
+    final String? Function(String?)? validator,
     final bool? error,
     final bool? filled,
     final String? errorMessage,
@@ -498,6 +501,7 @@ class _PhoneNumber extends TextFormUpdated {
     final TextStyle? fieldPostRedirectionStyle,
     final FocusNode? focusNode,
     final FocusNode? nextFocusNode,
+    final String? Function(String?)? validator,
     final BoxConstraints? prefixChildBoxConstraint,
     final BoxConstraints? suffixChildBoxConstraint,
     final Widget? suffixChild,
@@ -536,6 +540,7 @@ class _PhoneNumber extends TextFormUpdated {
           filled: filled,
           backgroundColor: backgroundColor,
           hintText: hintText,
+          validator: validator,
           radius: radius,
           contentPadding: contentPadding,
           fieldNameStyle: fieldNameStyle,
@@ -587,6 +592,7 @@ class _PhoneNumber extends TextFormUpdated {
             FocusScope.of(context).requestFocus(nextFocusNode);
           },
           onInputChanged: onInputChanged,
+          validator: validator,
           spaceBetweenSelectorAndTextField: 0,
           selectorConfig: const SelectorConfig(
             setSelectorButtonAsPrefixIcon: true,
@@ -1345,3 +1351,160 @@ class SelectForm<T> extends StatelessWidget {
     );
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////// TEXT FORM FIELD WITH AUTO COMPLETE ///////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+class GooglePlaceFormField extends StatefulWidget {
+  final GooglePlace googlePlace;
+  final FocusNode focusNode;
+  final FocusNode? nextFocusNode;
+  final TextEditingController textEditingController;
+  final String? fieldName;
+  const GooglePlaceFormField({
+    required this.focusNode,
+    required this.textEditingController,
+    required this.googlePlace,
+    this.nextFocusNode,
+    this.fieldName,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<GooglePlaceFormField> createState() => _GooglePlaceFormFieldState();
+}
+
+class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
+  List<AutocompletePrediction> _predictions = [];
+  String _city = "";
+  String _street = "";
+  String _country = "";
+  Map _geoloc = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        widget.fieldName != null
+            ? Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  widget.fieldName!,
+                  style: TextStyle(color: AppColor.primaryColor, fontSize: 12, fontWeight: FontWeight.w500),
+                ))
+            : SizedBox(),
+        SizedBox(height: 6.h),
+        TextFormUpdated.classic(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Ce champ est obligatoire.';
+            } else {
+              if (value.isValidName) return ('Un ou plusieurs charactères ne sont pas accepter.');
+            }
+            return null;
+          },
+          hintText: 'Ex. 12 Avenue Pauliani',
+          focusNode: widget.focusNode,
+          onFieldSubmitted: (val) {
+            if (widget.nextFocusNode != null) FocusScope.of(context).requestFocus(widget.nextFocusNode);
+          },
+          controller: widget.textEditingController,
+          cursorColor: AppColor.primaryColor,
+          onChanged: (value) async {
+            if (value.isNotEmpty) {
+              var result =
+                  await widget.googlePlace.autocomplete.get(value, language: 'fr', components: [Component("country", "fr")]);
+              if (result != null) {
+                print(result.predictions);
+                setState(() {
+                  _predictions = result.predictions!;
+                });
+              }
+            } else {
+              setState(() {
+                _predictions.clear();
+              });
+            }
+          },
+        ),
+        _predictions.isNotEmpty && widget.textEditingController.text.length >= 0
+            ? Container(
+                child: Container(
+                color: AppColor.primaryColor.withOpacity(0.03),
+                width: 1.sw,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: _predictions.length <= 3 ? _predictions.length : 3,
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _street = "";
+                          _city = "";
+                          _country = "";
+                        });
+                        DetailsResponse? result = await widget.googlePlace.details.get(
+                          _predictions[index].reference!,
+                          fields: "address_components,geometry",
+                          language: 'fr',
+                        );
+                        if (result != null && result.result != null) {
+                          for (final component in result.result!.addressComponents!) {
+                            if (component.types!.contains("locality")) {
+                              setState(() {
+                                _city = component.longName!;
+                              });
+                            }
+                            if (component.types!.contains("street_number")) {
+                              setState(() {
+                                _street = component.longName! + " ";
+                              });
+                            }
+                            if (component.types!.contains("route")) {
+                              setState(() {
+                                _street = _street + component.longName!;
+                              });
+                            }
+                            if (component.types!.contains("country")) {
+                              setState(() {
+                                _country = component.longName!;
+                              });
+                            }
+                            print(_street + " " + _city + " " + _country);
+                          }
+                          setState(() {
+                            _geoloc = {
+                              "lat": result.result!.geometry!.location!.lat,
+                              "lng": result.result!.geometry!.location!.lng
+                            };
+                            print(_geoloc);
+                          });
+                        }
+                        setState(() {
+                          widget.textEditingController.text = _predictions[index].description!;
+                          widget.textEditingController.selection =
+                              TextSelection.fromPosition(TextPosition(offset: widget.textEditingController.text.length));
+                          _predictions.clear();
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(9.5.w, 10.h, 9.5.w, 10.h),
+                        child: Text(
+                          _predictions[index].description!,
+                          style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ))
+            : SizedBox(),
+      ],
+    );
+  }
+}
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////

@@ -10,7 +10,8 @@ import '../../../helper.dart';
 import '../../../main.dart';
 
 class FormUser extends StatefulWidget {
-  const FormUser({Key? key}) : super(key: key);
+  final bool backButton;
+  const FormUser({this.backButton = false, Key? key}) : super(key: key);
 
   @override
   State<FormUser> createState() => _FormUserState();
@@ -38,6 +39,11 @@ class _FormUserState extends State<FormUser> {
             title: 'Créez votre profil',
             invertColor: true,
             titleSize: 23,
+            onTapBackButton: widget.backButton
+                ? () {
+                    Navigator.pop(context);
+                  }
+                : null,
           ),
           SizedBox(height: 46.h),
           Padding(

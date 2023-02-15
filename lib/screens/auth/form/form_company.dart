@@ -1,7 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flylens/components/alert_toast.dart';
+import 'package:flylens/components/api.dart';
+import 'package:flylens/main.dart';
+import 'package:google_place/google_place.dart';
 import '../../../components/button.dart';
 import '../../../components/form_fields.dart';
 import '../../../components/header.dart';
@@ -18,14 +24,31 @@ class FormCompany extends StatefulWidget {
 
 class _FormCompanyState extends State<FormCompany> {
   final _formKey = GlobalKey<FormState>();
+  var googlePlace = GooglePlace(GOOGLE_PLACES_API);
 
   final FocusNode focusNom = FocusNode();
   final FocusNode focusSiret = FocusNode();
   final FocusNode focusAdress = FocusNode();
+  final FocusNode focusAdressBis = FocusNode();
+  final FocusNode focusTel = FocusNode();
+  final FocusNode focusTelBis = FocusNode();
+  final FocusNode focusMail = FocusNode();
 
-  String? nom;
-  String? siret;
-  String? adresse;
+  final TextEditingController controllerNom = TextEditingController();
+  final TextEditingController controllerSiret = TextEditingController();
+  final TextEditingController controllerAdress = TextEditingController();
+  final TextEditingController controllerAdressBis = TextEditingController();
+  final TextEditingController controllerTel = TextEditingController();
+  final TextEditingController controllerTelBis = TextEditingController();
+  final TextEditingController controllerMail = TextEditingController();
+
+  FToast fToast = FToast();
+
+  @override
+  void initState() {
+    fToast.init(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +71,13 @@ class _FormCompanyState extends State<FormCompany> {
                   children: [
                     TextFormUpdated.classic(
                       fieldName: 'Nom*',
-                      hintText: 'Ex. John',
+                      hintText: 'Ex. FlyLens',
                       cursorColor: AppColor.primaryColor,
                       focusNode: focusNom,
                       nextFocusNode: focusSiret,
+                      controller: controllerNom,
                       onChanged: (value) {
-                        setState(() {
-                          nom = value;
-                        });
+                        setState(() {});
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -69,13 +91,63 @@ class _FormCompanyState extends State<FormCompany> {
                     SizedBox(height: 14.h),
                     TextFormUpdated.classic(
                       fieldName: 'Siret*',
-                      hintText: 'Ex. Doe',
+                      hintText: 'Ex. 291920309',
+                      textInputType: TextInputType.number,
                       focusNode: focusSiret,
-                      nextFocusNode: focusAdress,
+                      nextFocusNode: focusTel,
+                      controller: controllerSiret,
                       onChanged: (value) {
-                        setState(() {
-                          siret = value;
-                        });
+                        setState(() {});
+                      },
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(9),
+                      ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Ce champ est obligatoire.';
+                        } else {
+                          if (value.length < 9) {
+                            return 'Un SIREN valide contient 9 chiffres.';
+                          } else if (value.isNonDigit) {
+                            return 'Seul les chiffres sont autorisé.';
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 14.h),
+                    TextFormUpdated.phoneNumber(
+                      fieldName: 'Numéro de téléphone*',
+                      controller: controllerTel,
+                      focusNode: focusTel,
+                      nextFocusNode: focusTelBis,
+                      onInputChanged: (value) {
+                        setState(() {});
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 14.h),
+                    TextFormUpdated.phoneNumber(
+                      fieldName: 'Second Numéro de téléphone',
+                      controller: controllerTelBis,
+                      focusNode: focusTelBis,
+                      onInputChanged: (value) {
+                        setState(() {});
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 14.h),
+                    TextFormUpdated.classic(
+                      fieldName: "Adresse de l'entreprise*",
+                      hintText: 'Ex. 12 Avenue Pauliani',
+                      controller: controllerAdress,
+                      focusNode: focusAdress,
+                      onChanged: (value) {
+                        setState(() {});
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -88,13 +160,12 @@ class _FormCompanyState extends State<FormCompany> {
                     ),
                     SizedBox(height: 14.h),
                     TextFormUpdated.classic(
-                      fieldName: 'Adresse*',
+                      fieldName: "Seconde adresse de l'entreprise*",
                       hintText: 'Ex. 12 Avenue Pauliani',
-                      focusNode: focusAdress,
+                      controller: controllerAdressBis,
+                      focusNode: focusAdressBis,
                       onChanged: (value) {
-                        setState(() {
-                          adresse = value;
-                        });
+                        setState(() {});
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -110,21 +181,38 @@ class _FormCompanyState extends State<FormCompany> {
                       textButton: 'Suivant',
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
-                          String uuid = Uuid().v4();
-                          await FirebaseFirestore.instance
-                              .collection(COLLECTION_USER)
-                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                              .update({
-                            'enterprise': [uuid]
-                          });
-                          await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(uuid).set({
-                            "nom": nom,
-                            "siret": siret,
-                            "adresse": adresse,
-                            "ownerId": FirebaseAuth.instance.currentUser!.uid,
-                            "uid": uuid,
-                          });
-                          Navigator.of(context).pop();
+                          if (await Api().infoSiren("429815581") != 200) {
+                            // Future.delayed(Duration(seconds: 2), () {
+                            fToast.showToast(
+                                gravity: ToastGravity.TOP,
+                                child: alertToast(message: "SIREN isn't valid. Please use a valid SIREN."),
+                                positionedToastBuilder: (context, child) {
+                                  return Positioned(
+                                    child: child,
+                                    top: 40,
+                                    left: 20,
+                                    right: 20,
+                                  );
+                                });
+                            // });
+                          } else {
+                            String uuid = Uuid().v4();
+                            await FirebaseFirestore.instance
+                                .collection(COLLECTION_USER)
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .update({
+                              'enterprise': [uuid]
+                            });
+                            await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(uuid).set({
+                              "nom": controllerNom.text,
+                              "siret": controllerSiret.text,
+                              "adresse": controllerAdress.text,
+                              "ownerId": FirebaseAuth.instance.currentUser!.uid,
+                              "uid": uuid,
+                            });
+                            Navigator.pushAndRemoveUntil(
+                                context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
+                          }
                         }
                       },
                     ),
@@ -143,3 +231,19 @@ class _FormCompanyState extends State<FormCompany> {
     );
   }
 }
+
+
+// SizedBox(height: 14.h),
+// GooglePlaceFormField(
+//   focusNode: focusAdress,
+//   textEditingController: controllerAdress,
+//   fieldName: "Adresse de l'entreprise*",
+//   googlePlace: googlePlace,
+// ),
+// SizedBox(height: 14.h),
+// GooglePlaceFormField(
+//   focusNode: focusAdress,
+//   textEditingController: controllerAdress,
+//   fieldName: "Seconde Adresse de l'entreprise",
+//   googlePlace: googlePlace,
+// ),
