@@ -88,7 +88,6 @@ class _ResetPasswordMainState extends State<ResetPasswordMain> {
                               return null;
                             }
                           } else {
-                            print(value);
                             return 'Ce champ est obligatoire.';
                           }
                         },

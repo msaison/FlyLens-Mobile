@@ -5,14 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flylens/Models/user/user_model.dart';
 import 'package:flylens/components/button.dart';
+import 'package:flylens/components/settings_cellule.dart';
+import 'package:flylens/components/tuple.dart';
+import 'package:flylens/config.dart';
 import 'package:flylens/helper.dart';
+import 'package:flylens/main.dart';
 import 'package:flylens/screens/auth/form/form_user.dart';
+import 'package:flylens/screens/create_fields/main_create_fields.dart';
 import 'package:page_transition/page_transition.dart';
-import '../../Models/user/user_model.dart';
-import '../../components/settings_cellule.dart';
-import '../../config.dart';
-import '../../main.dart';
 
 class SettingsMain extends StatefulWidget {
   const SettingsMain({Key? key}) : super(key: key);
@@ -89,7 +91,9 @@ class _SettingsMainState extends State<SettingsMain> {
                                     future: haveAnEntreprise(FirebaseAuth.instance.currentUser!.uid),
                                     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Object?>?> doc) {
                                       if (doc.hasData)
-                                        return ButtonDropDown();
+                                        return ButtonDropDown(
+                                          uid: doc.data!['uid'],
+                                        );
                                       else {
                                         return SizedBox();
                                       }
@@ -154,13 +158,11 @@ class _SettingsMainState extends State<SettingsMain> {
                                   svgIcon: 'assets/svg/linkedin.svg',
                                 ),
                                 SizedBox(height: 11.h),
-
                                 SettingsCellule(
                                   text: "Notre Instagram",
                                   svgIcon: "assets/svg/instagram.svg",
                                 ),
                                 SizedBox(height: 11.h),
-
                                 SettingsCellule(
                                   text: "Notre Github (Projet sources)",
                                   svgIcon: "assets/svg/github.svg",
@@ -224,19 +226,31 @@ class _SettingsMainState extends State<SettingsMain> {
 }
 
 List<Tuple2<String, IconData>> items = [
-  Tuple2(first: "Employer", second: Icons.person),
-  Tuple2(first: "Champs", second: Icons.business),
+  Tuple2("Employer", Icons.person),
+  Tuple2("Champs", Icons.business),
 ];
 
 class ButtonDropDown extends StatefulWidget {
-  const ButtonDropDown({Key? key}) : super(key: key);
+  final String uid;
+  const ButtonDropDown({required this.uid, Key? key}) : super(key: key);
 
   @override
   State<ButtonDropDown> createState() => _ButtonDropDownState();
 }
 
-class _ButtonDropDownState extends State<ButtonDropDown> {
+class _ButtonDropDownState extends State<ButtonDropDown> with SingleTickerProviderStateMixin {
   String selectedValue = "Paramètres entreprise";
+
+  double dropDownAngle = -1.55;
+
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(duration: Duration(milliseconds: 800), vsync: this);
+    _animationController.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,16 +271,33 @@ class _ButtonDropDownState extends State<ButtonDropDown> {
           isDense: true,
           isExpanded: true,
           // elevation: 0,
+          onMenuStateChange: (isOpen) {
+            setState(() {
+              isOpen ? dropDownAngle = 0 : dropDownAngle = -1.55;
+            });
+          },
           underline: Container(),
-          alignment: Alignment.bottomCenter,
-          icon: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: AppColor.primaryColor,
-            size: 25.sp,
+          alignment: Alignment.center,
+          icon: Padding(
+            padding: EdgeInsets.only(right: 18.h),
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) => Transform.rotate(
+                angle: _animationController.value * dropDownAngle,
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: AppColor.primaryColor,
+                  size: 25.sp,
+                ),
+              ),
+            ),
           ),
           // borderRadius: BorderRadius.circular(7.r),
           hint: Row(
             children: [
+              SizedBox(
+                width: 7.h,
+              ),
               Icon(
                 Icons.business,
                 color: AppColor.primaryColor,
@@ -285,24 +316,40 @@ class _ButtonDropDownState extends State<ButtonDropDown> {
                   child: Row(
                     children: [
                       Icon(
-                        e.second,
+                        e.item2,
                         color: AppColor.primaryColor,
                         size: 21,
                       ),
                       SizedBox(width: 11.w),
                       Text(
-                        e.first,
+                        e.item1,
                         style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w600)
                             .copyWith(fontFamily: "Poppins"),
                       ),
                     ],
                   ),
-                  value: e.first))
+                  value: e.item1))
               .toList(),
           style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w600)
               .copyWith(fontFamily: "Poppins"),
           onChanged: (String? value) {
-            print(value);
+            if (value == 'Champs') {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      duration: Duration(milliseconds: 400),
+                      type: PageTransitionType.rightToLeftWithFade,
+                      child: MainCreateFields(
+                        enterpriseUid: widget.uid,
+                      )));
+            } else if (value == 'Employer') {
+              // Navigator.push(
+              //     context,
+              //     PageTransition(
+              //         duration: Duration(milliseconds: 400),
+              //         type: PageTransitionType.rightToLeftWithFade,
+              //         child: MainEnterpriseEmploye()));
+            }
           },
         ),
       ),

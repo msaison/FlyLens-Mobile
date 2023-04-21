@@ -101,7 +101,6 @@ class _RegisterMainState extends State<RegisterMain> {
                                 return null;
                               }
                             } else {
-                              print(value);
                               return 'Ce champ est obligatoire.';
                             }
                           },

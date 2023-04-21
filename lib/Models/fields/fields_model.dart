@@ -11,6 +11,7 @@ class FieldsModel with _$FieldsModel {
     required String name,
     @ColorConverter() required Color color,
     @LatLngConverter() required List<LatLng> polygons,
+    @LatLngConverter() required LatLng center,
   }) = _FieldsModel;
 
   factory FieldsModel.fromJson(Map<String, dynamic> json) => _$FieldsModelFromJson(json);

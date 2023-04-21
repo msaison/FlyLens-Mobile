@@ -36,7 +36,6 @@ dependencies:
   modal_bottom_sheet: ^2.1.0
   cupertino_icons: ^1.0.2
   cached_network_image: ^3.2.2
-  bubble_bottom_bar: ^2.0.0
   google_nav_bar: ^5.0.6
   gradient_borders: ^0.2.0
   url_launcher: ^6.1.7

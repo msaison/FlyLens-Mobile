@@ -91,7 +91,6 @@ class _LoginMainState extends State<LoginMain> {
                                       return null;
                                     }
                                   } else {
-                                    print(value);
                                     return 'Ce champ est obligatoire.';
                                   }
                                 },
@@ -113,7 +112,6 @@ class _LoginMainState extends State<LoginMain> {
                                       return null;
                                     }
                                   } else {
-                                    print(value);
                                     return 'Ce champ est obligatoire.';
                                   }
                                 },
