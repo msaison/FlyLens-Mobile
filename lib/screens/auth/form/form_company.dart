@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flylens/components/alert_toast.dart';
-import 'package:flylens/components/api.dart';
-import 'package:flylens/helper.dart';
-import 'package:flylens/main.dart';
+import '../../../components/alert_toast.dart';
+import '../../../components/api.dart';
+import '../../../helper.dart';
+import '../../../main.dart';
 import 'package:google_place/google_place.dart';
 import '../../../components/button.dart';
 import '../../../components/form_fields.dart';
 import '../../../components/header.dart';
 import '../../../config.dart';
 import 'package:uuid/uuid.dart';
+import '../../../api.dart';
 
 class FormCompany extends StatefulWidget {
   const FormCompany({Key? key}) : super(key: key);

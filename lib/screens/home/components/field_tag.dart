@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/Models/fields/fields_model.dart';
-import 'package:flylens/config.dart';
-import 'package:flylens/helper.dart';
+import '../../../Models/fields/fields_model.dart';
+import '../../../config.dart';
+import '../../../helper.dart';
 
 class FieldTagMain extends StatefulWidget {
   final List<FieldsModel> fieldLists;

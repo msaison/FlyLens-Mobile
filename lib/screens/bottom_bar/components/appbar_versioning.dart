@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flylens/screens/bottom_bar/components/appbarv0.dart';
-import 'package:flylens/screens/bottom_bar/components/appbarv2.dart';
-import 'package:flylens/screens/bottom_bar/components/appbarv3.dart';
+import 'appbarv0.dart';
+import 'appbarv2.dart';
+import 'appbarv3.dart';
 
 enum AppBarVersion { V0, V1, V2, V3 }
 

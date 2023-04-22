@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flylens/screens/bottom_bar/fnav/fbutton.dart';
-import 'package:flylens/screens/bottom_bar/fnav/fnav.dart';
+import '../fnav/fbutton.dart';
+import '../fnav/fnav.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AppBarV3 extends StatefulWidget {
@@ -56,7 +56,7 @@ class _AppBarV3State extends State<AppBarV3> {
               ),
               FButton(
                 iconData: Iconsax.setting_2,
-                iconBehind: Iconsax.setting_22,
+                iconBehind: Iconsax.setting_2,
                 text: 'Params',
               ),
             ],

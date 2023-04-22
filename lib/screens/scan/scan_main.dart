@@ -5,13 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/components/button.dart';
-import 'package:flylens/components/form_fields.dart';
-import 'package:flylens/components/header.dart';
-import 'package:flylens/config.dart';
-import 'package:flylens/main.dart';
+import '../../components/button.dart';
+import '../../components/form_fields.dart';
+import '../../components/header.dart';
+import '../../config.dart';
+import '../../main.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:uuid/uuid.dart';
+import '../../api.dart';
 
 class ScanMain extends StatefulWidget {
   const ScanMain({Key? key}) : super(key: key);

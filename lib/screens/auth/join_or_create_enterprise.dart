@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/config.dart';
-import 'package:flylens/screens/auth/form/form_company.dart';
-import 'package:flylens/screens/scan/scan_main.dart';
+import '../../config.dart';
+import 'form/form_company.dart';
+import '../scan/scan_main.dart';
 import 'package:page_transition/page_transition.dart';
 
 class JoinOrCreateEnterprise extends StatefulWidget {

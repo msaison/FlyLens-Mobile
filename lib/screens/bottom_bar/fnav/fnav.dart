@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flylens/screens/bottom_bar/fnav/fbutton.dart';
+import 'fbutton.dart';
 
 class FNav extends StatefulWidget {
   final ValueChanged<int>? onTabChange;

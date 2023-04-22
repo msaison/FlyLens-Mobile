@@ -5,16 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flylens/Models/user/user_model.dart';
-import 'package:flylens/components/button.dart';
-import 'package:flylens/components/settings_cellule.dart';
-import 'package:flylens/components/tuple.dart';
-import 'package:flylens/config.dart';
-import 'package:flylens/helper.dart';
-import 'package:flylens/main.dart';
-import 'package:flylens/screens/auth/form/form_user.dart';
-import 'package:flylens/screens/create_fields/main_create_fields.dart';
+import '../../Models/user/user_model.dart';
+import '../../components/button.dart';
+import '../../components/settings_cellule.dart';
+import '../../components/tuple.dart';
+import '../../config.dart';
+import '../../helper.dart';
+import '../../main.dart';
+import '../auth/form/form_user.dart';
+import '../create_fields/main_create_fields.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../api.dart';
 
 class SettingsMain extends StatefulWidget {
   const SettingsMain({Key? key}) : super(key: key);

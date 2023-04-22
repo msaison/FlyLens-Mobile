@@ -1,13 +1,14 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flylens/screens/auth/join_or_create_enterprise.dart';
-import 'package:flylens/screens/bottom_bar/main_bottom_bar.dart';
+import 'screens/auth/join_or_create_enterprise.dart';
+import 'screens/bottom_bar/main_bottom_bar.dart';
 import 'config.dart';
 import 'handle_auth.dart';
 import 'screens/auth/form/form_user.dart';
 import 'package:flutter/material.dart';
 import 'screens/on_boarding/on_boarding_main.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../../api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

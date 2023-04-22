@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:flylens/Models/fields/fields_model.dart';
-import 'package:flylens/config.dart';
+import 'Models/fields/fields_model.dart';
+import '../../api.dart';
 
 extension extString on String {
   bool get isValidEmail {

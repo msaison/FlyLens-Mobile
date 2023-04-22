@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flylens/config.dart';
+import '../../../config.dart';
 
 class FButton extends StatefulWidget {
   final Size size;

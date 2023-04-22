@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flylens/screens/bottom_bar/components/appbar_versioning.dart';
-import 'package:flylens/screens/home/home_main.dart';
-import 'package:flylens/screens/maps/maps_main.dart';
-import 'package:flylens/screens/settings/settings_main.dart';
+
+import '../home/home_main.dart';
+import '../maps/maps_main.dart';
+import '../settings/settings_main.dart';
+import 'components/appbar_versioning.dart';
 
 class MainBottomBar extends StatefulWidget {
   const MainBottomBar({Key? key}) : super(key: key);

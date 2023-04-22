@@ -15,6 +15,8 @@ import 'package:flylens/config.dart';
 import 'package:flylens/main.dart';
 import '../../../components/alert_toast.dart';
 import '../../../helper.dart';
+import '../../../api.dart';
+
 
 class RegisterMain extends StatefulWidget {
   @override

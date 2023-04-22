@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/components/weather_show.dart';
-import 'package:flylens/config.dart';
+import '../../../components/weather_show.dart';
+import '../../../config.dart';
 
 class WeatherMain extends StatefulWidget {
   const WeatherMain({Key? key}) : super(key: key);

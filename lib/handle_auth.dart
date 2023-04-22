@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
 import 'config.dart';
+import '../../api.dart';
 
 Future<Widget?> handleAuth({
   required Map<String, RedirectionHandle> redirections,

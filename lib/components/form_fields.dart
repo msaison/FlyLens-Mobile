@@ -2,7 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/helper.dart';
+import '../helper.dart';
 import 'package:google_place/google_place.dart';
 import '../config.dart';
 import 'package:iconsax/iconsax.dart';

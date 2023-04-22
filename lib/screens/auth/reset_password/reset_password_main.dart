@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flylens/components/alert_toast.dart';
-import 'package:flylens/components/button.dart';
-import 'package:flylens/components/form_fields.dart';
-import 'package:flylens/components/header.dart';
-import 'package:flylens/config.dart';
+import '../../../components/alert_toast.dart';
+import '../../../components/button.dart';
+import '../../../components/form_fields.dart';
+import '../../../components/header.dart';
+import '../../../config.dart';
 
 class ResetPasswordMain extends StatefulWidget {
   const ResetPasswordMain({Key? key}) : super(key: key);
