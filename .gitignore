@@ -30,6 +30,8 @@
 /build/
 api.dart
 *.lock
+android
+ios
 
 # Android related
 **/android/**/gradle-wrapper.jar

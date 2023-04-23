@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../components/alert_toast.dart';
-import '../../../components/api.dart';
 import '../../../helper.dart';
 import '../../../main.dart';
 import 'package:google_place/google_place.dart';

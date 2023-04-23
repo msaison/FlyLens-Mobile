@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flylens/Models/fields/fields_model.dart';
-import 'package:flylens/components/weather_show.dart';
 import 'package:flylens/config.dart';
 import 'package:flylens/helper.dart';
 import 'package:flylens/screens/home/components/analyse_main.dart';
