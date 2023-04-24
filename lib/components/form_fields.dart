@@ -8,6 +8,7 @@ import '../config.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:latlong2/latlong.dart';
 
 class TextFormUpdated extends StatelessWidget {
   final TextEditingController? controller;
@@ -1362,12 +1363,16 @@ class GooglePlaceFormField extends StatefulWidget {
   final FocusNode? nextFocusNode;
   final TextEditingController textEditingController;
   final String? fieldName;
+  final String? hintText;
+  final Function(LatLng latLng)? position;
   const GooglePlaceFormField({
     required this.focusNode,
     required this.textEditingController,
     required this.googlePlace,
     this.nextFocusNode,
     this.fieldName,
+    this.hintText,
+    this.position,
     Key? key,
   }) : super(key: key);
 
@@ -1405,7 +1410,7 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
             }
             return null;
           },
-          hintText: 'Ex. 12 Avenue Pauliani',
+          hintText: widget.hintText != null ? widget.hintText : 'Ex. 12 Avenue Pauliani',
           focusNode: widget.focusNode,
           onFieldSubmitted: (val) {
             if (widget.nextFocusNode != null) FocusScope.of(context).requestFocus(widget.nextFocusNode);
@@ -1414,8 +1419,8 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
           cursorColor: AppColor.primaryColor,
           onChanged: (value) async {
             if (value.isNotEmpty) {
-              var result =
-                  await widget.googlePlace.autocomplete.get(value, language: 'fr', components: [Component("country", "fr")]);
+              var result = await widget.googlePlace.autocomplete
+                  .get(value, language: 'fr', components: [Component("country", "fr")]);
               if (result != null) {
                 print(result.predictions);
                 setState(() {
@@ -1476,17 +1481,16 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
                             print(_street + " " + _city + " " + _country);
                           }
                           setState(() {
-                            _geoloc = {
-                              "lat": result.result!.geometry!.location!.lat,
-                              "lng": result.result!.geometry!.location!.lng
-                            };
-                            print(_geoloc);
+                            LatLng _geoloc = LatLng(
+                                result.result!.geometry!.location!.lat!, result.result!.geometry!.location!.lng!);
+                            if (widget.position != null) widget.position!(_geoloc);
+                            // print(_geoloc);
                           });
                         }
                         setState(() {
                           widget.textEditingController.text = _predictions[index].description!;
-                          widget.textEditingController.selection =
-                              TextSelection.fromPosition(TextPosition(offset: widget.textEditingController.text.length));
+                          widget.textEditingController.selection = TextSelection.fromPosition(
+                              TextPosition(offset: widget.textEditingController.text.length));
                           _predictions.clear();
                         });
                       },

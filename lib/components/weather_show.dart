@@ -1,13 +1,27 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flylens/api.dart';
+import 'package:flylens/helper.dart';
+import 'package:iconsax/iconsax.dart';
 import '../config.dart';
 import 'package:weather/weather.dart';
 
 class WeatherShow extends StatefulWidget {
   final double latitude;
   final double longitude;
-  const WeatherShow({this.latitude = 43.631188, this.longitude = 7.130258, Key? key}) : super(key: key);
+  final String name;
+  final bool deleting;
+  final void Function(bool? delete)? isDeleting;
+  const WeatherShow(
+      {required this.latitude,
+      required this.longitude,
+      required this.name,
+      this.deleting = false,
+      this.isDeleting,
+      Key? key})
+      : super(key: key);
 
   @override
   State<WeatherShow> createState() => _WeatherShowState();
@@ -15,6 +29,7 @@ class WeatherShow extends StatefulWidget {
 
 class _WeatherShowState extends State<WeatherShow> {
   final WeatherFactory _weatherFactory = WeatherFactory(WEATHER_API, language: Language.FRENCH);
+  bool _isDelete = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +37,7 @@ class _WeatherShowState extends State<WeatherShow> {
         future: _weatherFactory.currentWeatherByLocation(widget.latitude, widget.longitude),
         builder: (BuildContext context, AsyncSnapshot<Weather> weather) {
           return Container(
-            padding: EdgeInsets.only(left: 25).copyWith(right: 40),
+            padding: EdgeInsets.only(left: widget.deleting ? 10 : 25).copyWith(right: widget.deleting ? 20 : 40),
             constraints: BoxConstraints(maxHeight: 71),
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
             child: weather.hasData
@@ -33,14 +48,20 @@ class _WeatherShowState extends State<WeatherShow> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Aujourd'hui",
-                            style: TextStyle(color: Color.fromARGB(255, 53, 158, 81), fontWeight: FontWeight.w600),
+                          Container(
+                            width: 100.w,
+                            child: AutoSizeText(
+                              widget.name,
+                              minFontSize: 5,
+                              maxLines: 1,
+                              style: TextStyle(color: Color.fromARGB(255, 53, 158, 81), fontWeight: FontWeight.w600),
+                            ),
                           ),
                           Text.rich(
                             TextSpan(
                                 text: '${weather.data!.tempMax!.celsius!.toInt().toString()}°C ',
-                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
+                                style:
+                                    TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                                 children: [
                                   TextSpan(
                                       text: '${weather.data!.tempMin!.celsius!.toInt().toString()}°C',
@@ -57,7 +78,8 @@ class _WeatherShowState extends State<WeatherShow> {
                           Text.rich(
                             TextSpan(
                                 text: '${weather.data!.date!.hour}:${weather.data!.date!.minute}h ',
-                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
+                                style:
+                                    TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                                 children: [
                                   TextSpan(
                                       text:
@@ -74,7 +96,8 @@ class _WeatherShowState extends State<WeatherShow> {
                               ),
                               Text(
                                 '${weather.data!.humidity}%',
-                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
+                                style:
+                                    TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                               ),
                               SizedBox(width: 10),
                               Icon(
@@ -84,12 +107,24 @@ class _WeatherShowState extends State<WeatherShow> {
                               ),
                               Text(
                                 '${weather.data!.windSpeed}m/s',
-                                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
+                                style:
+                                    TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 10),
                               ),
                             ],
                           )
                         ],
-                      )
+                      ),
+                      widget.deleting
+                          ? Checkbox(
+                              value: _isDelete,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isDelete = !_isDelete;
+                                });
+                                if (widget.isDeleting != null) widget.isDeleting!(value);
+                              },
+                            )
+                          : Container()
                     ],
                   )
                 : Center(
@@ -100,5 +135,30 @@ class _WeatherShowState extends State<WeatherShow> {
                   ),
           );
         });
+  }
+}
+
+class WeatherAdd extends StatefulWidget {
+  final VoidCallback onTap;
+  const WeatherAdd({required this.onTap, Key? key}) : super(key: key);
+
+  @override
+  State<WeatherAdd> createState() => _WeatherAddState();
+}
+
+class _WeatherAddState extends State<WeatherAdd> {
+  @override
+  Widget build(BuildContext context) {
+    return inkWell(
+      onTap: widget.onTap,
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+      child: Container(
+        padding: EdgeInsets.only(left: 25).copyWith(right: 40),
+        height: 71.h,
+        width: double.infinity,
+        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        child: Icon(Iconsax.add),
+      ),
+    );
   }
 }

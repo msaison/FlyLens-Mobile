@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flylens/Models/weather/weather_model.dart';
 import 'dart:math';
 
 import 'Models/fields/fields_model.dart';
@@ -107,6 +109,22 @@ Future<List<FieldsModel>> getAllFields(String uuid) async {
   return models;
 }
 
+Future<List<WeatherModel>?> getAllWeather() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    List<WeatherModel> models = [];
+    QuerySnapshot<Map<String, dynamic>> doc =
+        await FirebaseFirestore.instance.collection(COLLECTION_USER).doc(user.uid).collection('Weather').get();
+
+    doc.docs.forEach((element) {
+      models.add(WeatherModel.fromJson(element.data()));
+    });
+
+    return models;
+  } else
+    return null;
+}
+
 Future<List<FieldsModel>?> getAllFieldsWithUserId(String uuid) async {
   List<FieldsModel> models = [];
   final snapshot =
@@ -126,7 +144,6 @@ Future<List<FieldsModel>?> getAllFieldsWithUserId(String uuid) async {
     return null;
   }
 }
-
 
 Future<String?> getProfilePicture(String documentId) async {
   final docRef = FirebaseFirestore.instance.collection('Users').doc(documentId);

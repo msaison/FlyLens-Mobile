@@ -28,7 +28,8 @@ class _HomeMainState extends State<HomeMain> {
             builder: (context, AsyncSnapshot<List<FieldsModel>?> snapshot) {
               if (snapshot.hasData) {
                 return SafeArea(
-                  child: Column(
+                  child: ListView(
+                    physics: BouncingScrollPhysics(),
                     children: [
                       HeaderMain(),
                       SizedBox(height: 37.h),
@@ -52,6 +53,7 @@ class _HomeMainState extends State<HomeMain> {
                             WeatherMain(),
                             SizedBox(height: 24.h),
                             AnalyseMain(),
+                            SizedBox(height: 100),
                           ],
                         ),
                       ),

@@ -110,41 +110,51 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: SafeArea(
-                    child: SizedBox(
-                      height: 90,
-                      child: FutureBuilder(
-                          future: getAllFields(widget.enterpriseUid),
-                          builder: (context, AsyncSnapshot<List<FieldsModel>> snapshot) {
-                            if (snapshot.hasData) {
-                              return ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _mapController.move(snapshot.data![index].center, 16);
-                                      });
-                                    },
-                                    child: CardCreateFields(
-                                        fieldName: snapshot.data![index].name,
-                                        onTapDelete: () {
-                                          setState(() {
-                                            FirebaseFirestore.instance
-                                                .collection(COLLECTION_ENTERPRISE)
-                                                .doc(widget.enterpriseUid)
-                                                .collection("Fields")
-                                                .doc(snapshot.data![index].id)
-                                                .delete();
-                                          });
-                                        }),
-                                  );
-                                },
-                                itemCount: snapshot.data!.length,
-                              );
-                            } else
-                              return Container();
-                          }),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, bottom: 10),
+                    child: SafeArea(
+                      child: SizedBox(
+                        height: 90,
+                        // child: AllCardsFields(enterpriseUid: widget.enterpriseUid, mapController: _mapController),
+                        child: FutureBuilder(
+                            future: getAllFields(widget.enterpriseUid),
+                            builder: (context, AsyncSnapshot<List<FieldsModel>> snapshot) {
+                              if (snapshot.hasData) {
+                                return ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _mapController.move(snapshot.data![index].center, 16);
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 20),
+                                        child: CardCreateFields(
+                                            fieldName: snapshot.data![index].name,
+                                            onTapEdit: () {
+                                              //TODO EDIT
+                                            },
+                                            onTapDelete: () {
+                                              setState(() {
+                                                FirebaseFirestore.instance
+                                                    .collection(COLLECTION_ENTERPRISE)
+                                                    .doc(widget.enterpriseUid)
+                                                    .collection("Fields")
+                                                    .doc(snapshot.data![index].id)
+                                                    .delete();
+                                              });
+                                            }),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: snapshot.data!.length,
+                                );
+                              } else
+                                return Container();
+                            }),
+                      ),
                     ),
                   ),
                 ),
