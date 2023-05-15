@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flylens/components/gallery_image/galleryimage.dart';
 import '../../../components/button.dart';
 import '../../../components/providers/analyses.dart';
@@ -140,9 +139,11 @@ class _AnalyseMainState extends ConsumerState<AnalyseMain> {
                 );
               } else {
                 return Center(
-                    child: SpinKitWave(
-                  color: AppColor.primaryColor,
-                ));
+                  child: Text("Aucune analyse(s) détécter."),
+                  //     child: SpinKitWave(
+                  //   color: AppColor.primaryColor,
+                  // )
+                );
               }
             },
           ),
@@ -153,10 +154,7 @@ class _AnalyseMainState extends ConsumerState<AnalyseMain> {
             if (snapshot.hasData && snapshot.data != null) {
               return GalleryImage(imageUrls: snapshot.data!);
             } else {
-              return Center(
-                  child: SpinKitWave(
-                color: AppColor.primaryColor,
-              ));
+              return Container();
             }
           },
         ),

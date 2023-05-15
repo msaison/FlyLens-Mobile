@@ -221,7 +221,7 @@ class _ScanMainState extends State<ScanMain> {
                         .collection(COLLECTION_USER)
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .update({
-                      "enterprise": [code]
+                      "company": code
                     });
 
                     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);

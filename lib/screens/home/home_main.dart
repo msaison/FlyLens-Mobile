@@ -21,6 +21,7 @@ class HomeMain extends StatefulWidget {
 
 class _HomeMainState extends State<HomeMain> {
   String? fieldsId;
+  String? companyId;
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +56,14 @@ class _HomeMainState extends State<HomeMain> {
                                 setState(() {
                                   fieldsId = fieldID;
                                 });
-                                print(snapshot.data!.item2);
                               },
                             ),
                             SizedBox(height: 24.h),
                             WeatherMain(),
                             SizedBox(height: 24.h),
                             AnalyseMain(
-                              fieldID: null,
-                              companyID: 'TEST2FLY',
+                              fieldID: fieldsId,
+                              companyID: snapshot.data!.item2,
                             ),
                             SizedBox(height: 100),
                           ],

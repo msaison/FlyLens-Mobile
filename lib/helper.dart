@@ -217,7 +217,6 @@ Future<AnalyseGlobal?> fetchAnalysisStats({required String companyId, String? fi
 
     if (response.statusCode == 200) {
       final AnalyseModel analyseModel = AnalyseModel.fromJson(json.decode(response.body));
-      // ref.read(analyseProvider).updateModel(analyseModel, companyId, fieldId);
       await fetchImageFields(null, companyId);
       return AnalyseGlobal(analyseModel: analyseModel, entrepriseID: companyId, lastRefresh: DateTime.now());
     } else {
