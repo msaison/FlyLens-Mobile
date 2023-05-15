@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flylens/Models/weather/weather_model.dart';
-import 'package:flylens/api.dart';
-import 'package:flylens/components/button.dart';
-import 'package:flylens/components/form_fields.dart';
-import 'package:flylens/helper.dart';
+import '../../../Models/weather/weather_model.dart';
+import '../../../api.dart';
+import '../../../components/button.dart';
+import '../../../components/form_fields.dart';
+import '../../../helper.dart';
 import 'package:google_place/google_place.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:uuid/uuid.dart';
@@ -90,6 +90,8 @@ class _WeatherMainState extends State<WeatherMain> {
                           isDeleting: (delete) async {
                             if (delete!) {
                               _selectedDel.add(snapshot.data![index].id);
+                            } else {
+                              _selectedDel.remove(snapshot.data![index].id);
                             }
                           },
                         ),

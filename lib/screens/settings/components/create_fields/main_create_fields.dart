@@ -4,16 +4,16 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../Models/fields/fields_model.dart';
-import '../../components/button.dart';
-import '../../helper.dart';
+import '../../../../Models/fields/fields_model.dart';
+import '../../../../components/button.dart';
+import '../../../../helper.dart';
 import 'components/card_create_fields.dart';
 import 'components/header_create_fields.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../config.dart';
-import '../../api.dart';
+import '../../../../config.dart';
+import '../../../../api.dart';
 
 class MainCreateFields extends StatefulWidget {
   final String enterpriseUid;
@@ -26,6 +26,7 @@ class MainCreateFields extends StatefulWidget {
 class _MainCreateFieldsState extends State<MainCreateFields> {
   bool _isLoading = true;
   bool _isEditingPolygon = false;
+  String? _uidEditing;
   MapController _mapController = MapController();
   final _formKey = GlobalKey<FormState>();
   TextEditingController _controller = TextEditingController();
@@ -64,26 +65,34 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                                 size: 15,
                               ));
                     })),
-                    PolygonLayer(
-                        polygons: List.generate(fields.length, (index) {
-                              return Polygon(
-                                  points: fields[index].polygons,
-                                  isFilled: true,
-                                  color: fields[index].color,
-                                  label: fields[index].name);
-                            }) +
-                            [Polygon(points: pointTmp, color: _pickColor.withOpacity(0.5), isFilled: true)]),
+                    // PolygonLayer(
+                    //     polygons: List.generate(fields.length, (index) {
+                    //           if (_uidEditing != null && _uidEditing == fields[index].id) {
+                    //             return Polygon(
+                    //                 points: fields[index].polygons,
+                    //                 isFilled: true,
+                    //                 color: fields[index].color,
+                    //                 label: fields[index].name);
+                    //           } else {
+                    //             return Polygon(points: []);
+                    //           }
+                    //         }) +
+                    //         [Polygon(points: pointTmp, color: _pickColor.withOpacity(0.5), isFilled: true)]),
                     FutureBuilder(
                       future: getAllFields(widget.enterpriseUid),
                       builder: (context, AsyncSnapshot<List<FieldsModel>> snapshot) {
                         if (snapshot.hasData) {
                           return PolygonLayer(
                               polygons: List.generate(snapshot.data!.length, (index) {
-                                    return Polygon(
-                                        points: snapshot.data![index].polygons,
-                                        isFilled: true,
-                                        color: snapshot.data![index].color,
-                                        label: snapshot.data![index].name);
+                                    if (!(_uidEditing != null && _uidEditing == snapshot.data![index].id)) {
+                                      return Polygon(
+                                          points: snapshot.data![index].polygons,
+                                          isFilled: true,
+                                          color: snapshot.data![index].color,
+                                          label: snapshot.data![index].name);
+                                    } else {
+                                      return Polygon(points: []);
+                                    }
                                   }) +
                                   [Polygon(points: pointTmp, color: _pickColor.withOpacity(0.5), isFilled: true)]);
                         } else {
@@ -124,30 +133,24 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index) {
                                     return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          _mapController.move(snapshot.data![index].center, 16);
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(right: 20),
-                                        child: CardCreateFields(
+                                        onTap: () {
+                                          setState(() {
+                                            _mapController.move(snapshot.data![index].center, 16);
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(right: 20),
+                                          child: CardCreateFields(
                                             fieldName: snapshot.data![index].name,
                                             onTapEdit: () {
-                                              //TODO EDIT
-                                            },
-                                            onTapDelete: () {
+                                              dialogCreateFields();
                                               setState(() {
-                                                FirebaseFirestore.instance
-                                                    .collection(COLLECTION_ENTERPRISE)
-                                                    .doc(widget.enterpriseUid)
-                                                    .collection("Fields")
-                                                    .doc(snapshot.data![index].id)
-                                                    .delete();
+                                                _uidEditing = snapshot.data![index].id;
                                               });
-                                            }),
-                                      ),
-                                    );
+                                            },
+                                            onTapDelete: () => dialogDelete(snapshot.data![index].id),
+                                          ),
+                                        ));
                                   },
                                   itemCount: snapshot.data!.length,
                                 );
@@ -228,22 +231,39 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                                       height: 35.h,
                                       border: Border.all(color: Colors.green),
                                       textColor: Colors.green,
-                                      textButton: 'Créer',
+                                      textButton: _uidEditing != null ? 'Modifier' : 'Créer',
                                       onTap: () async {
                                         String uuid = Uuid().v4();
                                         if (pointTmp.length >= 4) {
-                                          await FirebaseFirestore.instance
-                                              .collection(COLLECTION_ENTERPRISE)
-                                              .doc(widget.enterpriseUid)
-                                              .collection("Fields")
-                                              .doc(uuid)
-                                              .set(FieldsModel(
-                                                      id: uuid,
-                                                      name: _controller.text,
-                                                      color: _pickColor,
-                                                      polygons: pointTmp,
-                                                      center: LatLngBounds.fromPoints(pointTmp).center)
-                                                  .toJson());
+                                          //TODO UIDEDITING CRASHED SOMETIMES
+                                          if (_uidEditing == null) {
+                                            await FirebaseFirestore.instance
+                                                .collection(COLLECTION_ENTERPRISE)
+                                                .doc(widget.enterpriseUid)
+                                                .collection("Fields")
+                                                .doc(uuid)
+                                                .set(FieldsModel(
+                                                        id: uuid,
+                                                        name: _controller.text,
+                                                        color: _pickColor,
+                                                        polygons: pointTmp,
+                                                        center: LatLngBounds.fromPoints(pointTmp).center)
+                                                    .toJson());
+                                          } else {
+                                            await FirebaseFirestore.instance
+                                                .collection(COLLECTION_ENTERPRISE)
+                                                .doc(widget.enterpriseUid)
+                                                .collection("Fields")
+                                                .doc(_uidEditing)
+                                                .update(FieldsModel(
+                                                        id: uuid,
+                                                        name: _controller.text,
+                                                        color: _pickColor,
+                                                        polygons: pointTmp,
+                                                        center: LatLngBounds.fromPoints(pointTmp).center)
+                                                    .toJson());
+                                          }
+
                                           setState(() {
                                             _isEditingPolygon = false;
                                           });
@@ -260,6 +280,7 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                                       textButton: 'Annuler',
                                       onTap: () {
                                         setState(() {
+                                          _uidEditing = null;
                                           _isEditingPolygon = false;
                                           pointTmp.clear();
                                           _controller.clear();
@@ -279,6 +300,118 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                 color: AppColor.primaryColor,
               )));
   }
+
+  //////////////////////////////////////////////////
+  ////////////       DIALOG EDIT      //////////////
+  //////////////////////////////////////////////////
+
+  Future<dynamic> dialogEdit(String uid) {
+    return showDialog(
+        context: context,
+        builder: (context) => StatefulBuilder(builder: (context, _setState) {
+              return AlertDialog(
+                title: Text('Êtes-vous sûr?'),
+                content: Text('Cette opération et irréversible.'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Button(
+                          textButton: 'Annuler',
+                          width: 100.w,
+                          height: 40.h,
+                          textColor: AppColor.primaryColor,
+                          border: Border.all(color: AppColor.primaryColor),
+                          onTap: () => Navigator.pop(context),
+                        ),
+                        Button(
+                          textButton: 'Supprimer',
+                          backgroundColor: AppColor.errorColor,
+                          width: 100.w,
+                          height: 40.h,
+                          onTap: () {
+                            setState(() {
+                              FirebaseFirestore.instance
+                                  .collection(COLLECTION_ENTERPRISE)
+                                  .doc(widget.enterpriseUid)
+                                  .collection("Fields")
+                                  .doc(uid)
+                                  .delete();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }));
+  }
+
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////
+  ///////////       DIALOG DELETE      /////////////
+  //////////////////////////////////////////////////
+
+  Future<dynamic> dialogDelete(String uid) {
+    return showDialog(
+        context: context,
+        builder: (context) => StatefulBuilder(builder: (context, _setState) {
+              return AlertDialog(
+                title: Text('Êtes-vous sûr?'),
+                content: Text('Cette opération et irréversible.'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+                actions: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Button(
+                          textButton: 'Annuler',
+                          width: 100.w,
+                          height: 40.h,
+                          textColor: AppColor.primaryColor,
+                          border: Border.all(color: AppColor.primaryColor),
+                          onTap: () => Navigator.pop(context),
+                        ),
+                        Button(
+                          textButton: 'Supprimer',
+                          backgroundColor: AppColor.errorColor,
+                          width: 100.w,
+                          height: 40.h,
+                          onTap: () {
+                            setState(() {
+                              FirebaseFirestore.instance
+                                  .collection(COLLECTION_ENTERPRISE)
+                                  .doc(widget.enterpriseUid)
+                                  .collection("Fields")
+                                  .doc(uid)
+                                  .delete();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }));
+  }
+
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////
+  //////////    DIALOG CREATE FIELDS    ////////////
+  //////////////////////////////////////////////////
 
   Future<dynamic> dialogCreateFields() {
     return showDialog(
@@ -393,4 +526,7 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                       )));
             }));
   }
+
+  //////////////////////////////////////////////////
+  //////////////////////////////////////////////////
 }

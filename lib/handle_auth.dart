@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:localstorage/localstorage.dart';
 
 import 'config.dart';
@@ -42,9 +43,16 @@ Future<Widget?> handleAuth({
     } else {
       DocumentSnapshot doc =
           await FirebaseFirestore.instance.collection(redirections.keys.first).doc(currentUser.uid).get();
+      if (!doc.exists) {
+        if (await GoogleSignIn().isSignedIn()) {
+          GoogleSignIn().signOut();
+        }
+        FirebaseAuth.instance.signOut();
+        return onBoarding;
+      }
       if (doc.get("registrationDone") == true) {
         Map<String, dynamic> _doc = doc.data() as Map<String, dynamic>;
-        if (_doc["enterprise"] == null || doc.get("enterprise").length <= 0) {
+        if (_doc["company"] == null /*|| doc.get("enterprise").length <= 0*/) {
           return redirections.values.first.entreprise;
         } else {
           return redirections.values.first.homePage;

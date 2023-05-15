@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../components/button.dart';
+import '../../../../../components/button.dart';
 
 class CardCreateFields extends StatefulWidget {
   final VoidCallback? onTapEdit;

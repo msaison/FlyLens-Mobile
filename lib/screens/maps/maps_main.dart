@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart' hide Theme;
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../config.dart';
 import 'package:latlong2/latlong.dart';
+
 import '../../api.dart';
+import '../../config.dart';
 
 class MapsMain extends StatefulWidget {
   const MapsMain({Key? key}) : super(key: key);

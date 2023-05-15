@@ -12,7 +12,8 @@ import '../../../api.dart';
 
 class FormUser extends StatefulWidget {
   final bool backButton;
-  const FormUser({this.backButton = false, Key? key}) : super(key: key);
+  final bool isEdit;
+  const FormUser({this.backButton = false, this.isEdit = false, Key? key}) : super(key: key);
 
   @override
   State<FormUser> createState() => _FormUserState();
@@ -23,11 +24,13 @@ class _FormUserState extends State<FormUser> {
 
   final FocusNode focusPrenom = FocusNode();
   final FocusNode focusNom = FocusNode();
+  final FocusNode focusTel = FocusNode();
   final FocusNode focusNaissance = FocusNode();
   final FocusNode focusSexe = FocusNode();
 
   String? prenom;
   String? nom;
+  String? tel;
   DateTime? naissance;
   String? sexe;
 
@@ -37,7 +40,7 @@ class _FormUserState extends State<FormUser> {
       child: Column(
         children: [
           Header(
-            title: 'Créez votre profil',
+            title: widget.isEdit ? 'Modifier votre profile' : 'Créez votre profile',
             invertColor: true,
             titleSize: 23,
             onTapBackButton: widget.backButton
@@ -78,7 +81,7 @@ class _FormUserState extends State<FormUser> {
                     fieldName: 'Nom*',
                     hintText: 'Ex. Doe',
                     focusNode: focusNom,
-                    nextFocusNode: focusNaissance,
+                    nextFocusNode: focusTel,
                     onChanged: (value) {
                       setState(() {
                         nom = value;
@@ -90,6 +93,21 @@ class _FormUserState extends State<FormUser> {
                       } else {
                         if (value.isValidName) return ('Un ou plusieurs charactères ne sont pas accepter.');
                       }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 14.h),
+                  TextFormUpdated.phoneNumber(
+                    fieldName: 'Numéro de téléphone*',
+                    // controller: controllerTel,
+                    focusNode: focusTel,
+                    nextFocusNode: focusNaissance,
+                    onInputChanged: (value) {
+                      setState(() {
+                        tel = value.phoneNumber;
+                      });
+                    },
+                    validator: (value) {
                       return null;
                     },
                   ),
@@ -108,7 +126,8 @@ class _FormUserState extends State<FormUser> {
                       if (value == null) {
                         return 'Ce champ est obligatoire.';
                       } else {
-                        if (value.isAfter(DateTime(2006))) return ('Vous devez avoir au moins 16 ans.');
+                        if (value.isAfter(DateTime(DateTime.now().year - 16)))
+                          return ('Vous devez avoir au moins 16 ans.');
                       }
                       return null;
                     },
@@ -151,13 +170,22 @@ class _FormUserState extends State<FormUser> {
                         await FirebaseFirestore.instance
                             .collection(COLLECTION_USER)
                             .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .update({
-                          "nom": nom,
-                          "prenom": prenom,
-                          "naissance": Timestamp.fromDate(naissance!),
-                          "sexe": sexe,
-                          "registrationDone": true,
-                        });
+                            .update(widget.isEdit
+                                ? {
+                                    "nom": nom,
+                                    "prenom": prenom,
+                                    "naissance": Timestamp.fromDate(naissance!),
+                                    "sexe": sexe,
+                                    "phone": tel
+                                  }
+                                : {
+                                    "nom": nom,
+                                    "prenom": prenom,
+                                    "naissance": Timestamp.fromDate(naissance!),
+                                    "sexe": sexe,
+                                    "phone": tel,
+                                    "registrationDone": true,
+                                  });
                         Navigator.pushAndRemoveUntil(
                             context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
                       }

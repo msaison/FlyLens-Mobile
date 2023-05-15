@@ -1,5 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'helper.dart';
+import 'package:timeago_flutter/timeago_flutter.dart';
 import 'screens/auth/join_or_create_enterprise.dart';
 import 'screens/bottom_bar/main_bottom_bar.dart';
 import 'config.dart';
@@ -13,8 +16,9 @@ import '../../api.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  setLocaleMessages('fr', FrMessagesCustom());
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {

@@ -128,10 +128,14 @@ class BackButtonUpdated extends StatelessWidget {
   final Color? backgroundColor;
   final VoidCallback? onTap;
   final Color iconColor;
+  final IconData iconData;
+  final double size;
   const BackButtonUpdated({
     this.backgroundColor,
     this.onTap,
     this.iconColor = Colors.white,
+    this.iconData = Icons.arrow_back_ios_new_rounded,
+    this.size = 46,
     Key? key,
   }) : super(key: key);
 
@@ -140,8 +144,8 @@ class BackButtonUpdated extends StatelessWidget {
     return Material(
         type: MaterialType.transparency,
         child: Container(
-            height: 46,
-            width: 46,
+            height: size.h,
+            width: size.h,
             decoration: BoxDecoration(
                 color: backgroundColor ?? AppColor.primaryColor, borderRadius: BorderRadius.circular(14.r)),
             child: Material(
@@ -152,7 +156,7 @@ class BackButtonUpdated extends StatelessWidget {
                     : AppColor.primaryColor.withOpacity(0.38),
                 borderRadius: BorderRadius.circular(14.r),
                 onTap: onTap,
-                child: Icon(Icons.arrow_back_ios_new_rounded, color: iconColor),
+                child: Icon(iconData, color: iconColor),
               ),
             )));
   }
@@ -166,6 +170,8 @@ class TextButtonUpdated extends StatelessWidget {
   final Color? textClickColor;
   final TextStyle? textClickStyle;
   final VoidCallback? onTap;
+  final MainAxisAlignment? mainAxisAlignment;
+  final TextDecoration? decoration;
   const TextButtonUpdated({
     this.clicktextButton = 'Button',
     this.text,
@@ -174,13 +180,15 @@ class TextButtonUpdated extends StatelessWidget {
     this.textClickColor,
     this.textClickStyle,
     this.onTap,
+    this.mainAxisAlignment,
+    this.decoration,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
       children: [
         text != null
             ? Text(
@@ -198,7 +206,7 @@ class TextButtonUpdated extends StatelessWidget {
                     color: textClickColor ?? AppColor.primaryColor,
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
-                    decoration: TextDecoration.underline),
+                    decoration: decoration ?? TextDecoration.underline),
           ),
         ),
       ],

@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 
 const MULTIPLE_ACCOUNT_TYPE = false;
 
-const DOES_YOUR_APP_NEED_ONBOARDING = true;
-/* ONCONNECT is the page after the connection but before the home page, it's for asking some permissions like geoloc */
-const DOES_YOUR_APP_NEED_ONCONNECT = true;
+const SERVER = 'dev';
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////

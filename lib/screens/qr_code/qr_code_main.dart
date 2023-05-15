@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../../components/button.dart';
-import '../../helper.dart';
-import 'package:timer_count_down/timer_controller.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 import '../../components/header.dart';
 import '../../config.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -20,10 +16,6 @@ class QrCodeMain extends StatefulWidget {
 
 class _QrCodeMainState extends State<QrCodeMain> {
   FToast fToast = FToast();
-  final CountdownController _controller = new CountdownController(autoStart: true);
-  int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 5;
-  String uniqueCode = getRandomCode(4);
-  bool codeValid = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,35 +32,6 @@ class _QrCodeMainState extends State<QrCodeMain> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              codeValid
-                  ? Countdown(
-                      seconds: 5,
-                      build: (context, time) {
-                        return Center(
-                            child: Text(
-                          'Le code expire dans ${time.toInt()} secondes',
-                          style: TextStyle(color: AppColor.errorColor, fontSize: 13.sp, fontWeight: FontWeight.w500),
-                        ));
-                      },
-                      onFinished: () {
-                        setState(() {
-                          codeValid = false;
-                        });
-                      },
-                      controller: _controller,
-                    )
-                  : TextButtonUpdated(
-                      clicktextButton: 'Nouveau code',
-                      text: 'Le code a expiré, ',
-                      onTap: () {
-                        setState(() {
-                          codeValid = true;
-                          uniqueCode = getRandomCode(4);
-                        });
-
-                        _controller.restart();
-                      },
-                    ),
               SizedBox(height: 25.h),
               Text(
                 'Votre employer peut directement rejoindre votre entreprise en scannant ce QR Code.',
@@ -78,23 +41,12 @@ class _QrCodeMainState extends State<QrCodeMain> {
               SizedBox(height: 20.h),
               Stack(
                 children: [
-                  QrImage(
-                    data: uniqueCode,
+                  QrImageView(
+                    data: widget.companyCode,
                     version: QrVersions.auto,
                     foregroundColor: Colors.black,
                     size: 200.h,
                   ),
-                  !codeValid
-                      ? Container(
-                          height: 200.h,
-                          width: 200.h,
-                          color: AppColor.errorColor.withOpacity(0.7),
-                          child: Icon(
-                            Icons.error_outlined,
-                            size: 50,
-                          ),
-                        )
-                      : SizedBox(),
                 ],
               ),
               SizedBox(height: 20.h),
@@ -105,18 +57,16 @@ class _QrCodeMainState extends State<QrCodeMain> {
               ),
               SizedBox(height: 20.h),
               SelectableText(
-                codeValid ? 'Code: $uniqueCode' : 'Code éxpiré',
+                widget.companyCode,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    color: codeValid ? Colors.black : AppColor.errorColor,
+                    color: Colors.black,
                     fontSize: 17.sp,
                     fontWeight: FontWeight.w600),
-                onTap: codeValid
-                    ? () {
-                        Clipboard.setData(ClipboardData(text: '$uniqueCode'));
+                onTap: () {
+                        Clipboard.setData(ClipboardData(text: widget.companyCode));
                         Fluttertoast.showToast(msg: 'Copié');
-                      }
-                    : null,
+                      },
               ),
             ],
           ),

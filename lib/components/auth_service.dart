@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'alert_toast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'alert_toast.dart';
 
 class AuthHelper {
   static Future<UserCredential?> signInWithGoogle() async {
@@ -14,6 +15,7 @@ class AuthHelper {
 
     if (googleUser != null) {
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      print('${googleAuth.accessToken} ${googleAuth.idToken}');
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -26,7 +28,7 @@ class AuthHelper {
     }
   }
 
-  static Future<UserCredential?>  signInWithFacebook() async {
+  static Future<UserCredential?> signInWithFacebook() async {
     final LoginResult loginResult = await FacebookAuth.instance.login();
     log(loginResult.status.toString());
     if (loginResult.status == LoginStatus.success) {

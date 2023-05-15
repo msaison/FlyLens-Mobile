@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flylens/Models/fields/fields_model.dart';
+import 'package:flylens/components/tuple.dart';
 import 'package:flylens/config.dart';
 import 'package:flylens/helper.dart';
 import 'package:flylens/screens/home/components/analyse_main.dart';
@@ -19,13 +20,15 @@ class HomeMain extends StatefulWidget {
 }
 
 class _HomeMainState extends State<HomeMain> {
+  String? fieldsId;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColor.backgroundColor,
         body: FutureBuilder(
-            future: getAllFieldsWithUserId(FirebaseAuth.instance.currentUser!.uid),
-            builder: (context, AsyncSnapshot<List<FieldsModel>?> snapshot) {
+            future: fetchFieldsByUserId(FirebaseAuth.instance.currentUser!.uid),
+            builder: (context, AsyncSnapshot<Tuple2<List<FieldsModel>, String>?> snapshot) {
               if (snapshot.hasData) {
                 return SafeArea(
                   child: ListView(
@@ -47,12 +50,21 @@ class _HomeMainState extends State<HomeMain> {
                             ),
                             SizedBox(height: 17.h),
                             FieldTagMain(
-                              fieldLists: snapshot.data!,
+                              fieldLists: snapshot.data!.item1,
+                              onIndex: (fieldID) {
+                                setState(() {
+                                  fieldsId = fieldID;
+                                });
+                                print(snapshot.data!.item2);
+                              },
                             ),
                             SizedBox(height: 24.h),
                             WeatherMain(),
                             SizedBox(height: 24.h),
-                            AnalyseMain(),
+                            AnalyseMain(
+                              fieldID: null,
+                              companyID: 'TEST2FLY',
+                            ),
                             SizedBox(height: 100),
                           ],
                         ),

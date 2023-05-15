@@ -6,7 +6,8 @@ import '../../../helper.dart';
 
 class FieldTagMain extends StatefulWidget {
   final List<FieldsModel> fieldLists;
-  const FieldTagMain({required this.fieldLists, Key? key}) : super(key: key);
+  final Function(String? fieldsId) onIndex;
+  const FieldTagMain({required this.fieldLists, required this.onIndex, Key? key}) : super(key: key);
 
   @override
   State<FieldTagMain> createState() => _FieldTagMainState();
@@ -37,6 +38,8 @@ class _FieldTagMainState extends State<FieldTagMain> {
       child: inkWell(
         borderRadius: BorderRadius.circular(12.r),
         onTap: () => setState(() {
+          if (__index > 0) widget.onIndex(widget.fieldLists[__index - 1].id);
+          else widget.onIndex(null);
           _index = __index;
         }),
         child: Container(

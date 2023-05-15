@@ -13,9 +13,10 @@ import 'package:flylens/components/form_fields.dart';
 import 'package:flylens/components/header.dart';
 import 'package:flylens/config.dart';
 import 'package:flylens/main.dart';
+
+import '../../../api.dart';
 import '../../../components/alert_toast.dart';
 import '../../../helper.dart';
-import '../../../api.dart';
 
 
 class RegisterMain extends StatefulWidget {

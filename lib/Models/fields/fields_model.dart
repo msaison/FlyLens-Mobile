@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:latlong2/latlong.dart';
+
 part 'fields_model.freezed.dart';
 part 'fields_model.g.dart';
 

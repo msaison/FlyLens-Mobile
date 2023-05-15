@@ -1385,7 +1385,6 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
   String _city = "";
   String _street = "";
   String _country = "";
-  Map _geoloc = {};
 
   @override
   Widget build(BuildContext context) {

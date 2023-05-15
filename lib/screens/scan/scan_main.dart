@@ -150,36 +150,6 @@ class _ScanMainState extends State<ScanMain> {
 
     controller.scannedDataStream.listen((scanData) async {
       _onCodeSubmit(controller: controller, code: scanData.code!);
-      // controller.pauseCamera();
-      // showDialog(
-      //     context: context,
-      //     builder: ((context) {
-      //       return AlertDialog(
-      //         title: Text(
-      //           'Voulez-vous vraiment rejoindre cette entreprise.',
-      //           textAlign: TextAlign.center,
-      //         ),
-      //         actions: [
-      //           Button(
-      //             textButton: 'Oui',
-      //             onTap: () {
-      //               print('oui');
-      //             },
-      //           ),
-      //           Button(
-      //             textButton: 'Non',
-      //             onTap: () {
-      //               controller.resumeCamera();
-      //               Navigator.of(context).pop();
-      //               print('non');
-      //             },
-      //           ),
-      //         ],
-      //       );
-      //     })).then((value) => controller.resumeCamera());
-      // setState(() {
-      //   // result = scanData;
-      // });
     });
   }
 
@@ -189,36 +159,6 @@ class _ScanMainState extends State<ScanMain> {
   }) async {
     controller.pauseCamera();
     showDialogIfDocExist(context: context, code: code);
-    // showDialog(
-    //     context: context,
-    //     builder: ((context) {
-    //       return AlertDialog(
-    //         title: Text(
-    //           'Voulez-vous vraiment rejoindre cette entreprise.',
-    //           textAlign: TextAlign.center,
-    //         ),
-    //         actions: [
-    //           Button(
-    //             textButton: 'Oui',
-    //             onTap: () async {
-    //               DocumentSnapshot doc =
-    //                   await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(code).get();
-    //               print(doc["name"]);
-    //             },
-    //           ),
-    //           SizedBox(
-    //             height: 10,
-    //           ),
-    //           Button(
-    //             textButton: 'Non',
-    //             onTap: () {
-    //               controller.resumeCamera();
-    //               Navigator.of(context).pop();
-    //             },
-    //           ),
-    //         ],
-    //       );
-    //     })).then((value) => controller.resumeCamera());
     setState(() {});
   }
 
@@ -275,7 +215,7 @@ class _ScanMainState extends State<ScanMain> {
                   textButton: 'Oui',
                   onTap: () async {
                     await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(code).update({
-                      "employe": [FirebaseAuth.instance.currentUser!.uid]
+                      "userIds": [FirebaseAuth.instance.currentUser!.uid]
                     });
                     await FirebaseFirestore.instance
                         .collection(COLLECTION_USER)

@@ -26,6 +26,9 @@ class _FormCompanyState extends State<FormCompany> {
   final _formKey = GlobalKey<FormState>();
   var googlePlace = GooglePlace(GOOGLE_PLACES_API);
 
+  bool secondphone = false;
+  bool secondadress = false;
+
   final FocusNode focusNom = FocusNode();
   final FocusNode focusSiret = FocusNode();
   final FocusNode focusAdress = FocusNode();
@@ -108,7 +111,7 @@ class _FormCompanyState extends State<FormCompany> {
                         } else {
                           if (value.length < 9) {
                             return 'Un SIREN valide contient 9 chiffres.';
-                          } else if (value.isNonDigit) {
+                          } else if (!value.isNonDigit) {
                             return 'Seul les chiffres sont autorisé.';
                           }
                         }
@@ -129,17 +132,38 @@ class _FormCompanyState extends State<FormCompany> {
                       },
                     ),
                     SizedBox(height: 14.h),
-                    TextFormUpdated.phoneNumber(
-                      fieldName: 'Second Numéro de téléphone',
-                      controller: controllerTelBis,
-                      focusNode: focusTelBis,
-                      onInputChanged: (value) {
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        return null;
-                      },
-                    ),
+                    secondphone
+                        ? TextFormUpdated.phoneNumber(
+                            fieldName: 'Second Numéro de téléphone',
+                            controller: controllerTelBis,
+                            focusNode: focusTelBis,
+                            suffixChild: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    secondphone = false;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: AppColor.errorColor,
+                                )),
+                            onInputChanged: (value) {
+                              setState(() {});
+                            },
+                            validator: (value) {
+                              return null;
+                            },
+                          )
+                        : TextButtonUpdated(
+                            clicktextButton: '+ Ajouter un autre numéro',
+                            decoration: TextDecoration.none,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            onTap: () {
+                              setState(() {
+                                secondphone = true;
+                              });
+                            },
+                          ),
                     SizedBox(height: 14.h),
                     TextFormUpdated.classic(
                       fieldName: "Adresse de l'entreprise*",
@@ -159,30 +183,52 @@ class _FormCompanyState extends State<FormCompany> {
                       },
                     ),
                     SizedBox(height: 14.h),
-                    TextFormUpdated.classic(
-                      fieldName: "Seconde adresse de l'entreprise*",
-                      hintText: 'Ex. 12 Avenue Pauliani',
-                      controller: controllerAdressBis,
-                      focusNode: focusAdressBis,
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Ce champ est obligatoire.';
-                        } else {
-                          if (value.isValidName) return ('Un ou plusieurs charactères ne sont pas accepter.');
-                        }
-                        return null;
-                      },
-                    ),
+                    secondadress
+                        ? TextFormUpdated.classic(
+                            fieldName: "Seconde adresse de l'entreprise",
+                            hintText: 'Ex. 12 Avenue Pauliani',
+                            controller: controllerAdressBis,
+                            focusNode: focusAdressBis,
+                            suffixChild: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    secondadress = false;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: AppColor.errorColor,
+                                )),
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            validator: (value) {
+                              if (secondadress) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Ce champ est obligatoire.';
+                                } else {
+                                  if (value.isValidName) return ('Un ou plusieurs charactères ne sont pas accepter.');
+                                }
+                              }
+                              return null;
+                            },
+                          )
+                        : TextButtonUpdated(
+                            clicktextButton: '+ Ajouter une autre adresse',
+                            decoration: TextDecoration.none,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            onTap: () {
+                              setState(() {
+                                secondadress = true;
+                              });
+                            },
+                          ),
                     SizedBox(height: 32.h),
                     Button(
                       textButton: 'Suivant',
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
-                          if (await Api().infoSiren("429815581") != 200) {
-                            // Future.delayed(Duration(seconds: 2), () {
+                          if (await Api().infoSiren(controllerSiret.text) != 200) {
                             fToast.showToast(
                                 gravity: ToastGravity.TOP,
                                 child: alertToast(message: "SIREN isn't valid. Please use a valid SIREN."),
@@ -194,22 +240,23 @@ class _FormCompanyState extends State<FormCompany> {
                                     right: 20,
                                   );
                                 });
-                            // });
                           } else {
                             String uuid = Uuid().v4();
                             await FirebaseFirestore.instance
                                 .collection(COLLECTION_USER)
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
-                                .update({
-                              'enterprise': [uuid]
-                            });
-                            await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(uuid).set({
+                                .update({'company': uuid});
+                            var map = {
                               "nom": controllerNom.text,
                               "siret": controllerSiret.text,
                               "adresse": controllerAdress.text,
                               "ownerId": FirebaseAuth.instance.currentUser!.uid,
+                              "phone": controllerTel.text,
                               "uid": uuid,
-                            });
+                            };
+                            if (secondphone) map.addEntries([MapEntry('phonebis', controllerTelBis.text)]);
+                            if (secondadress) map.addEntries([MapEntry('adressebis', controllerAdressBis.text)]);
+                            await FirebaseFirestore.instance.collection(COLLECTION_ENTERPRISE).doc(uuid).set(map);
                             Navigator.pushAndRemoveUntil(
                                 context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
                           }

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'components/main_entreprise_employe.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../Models/user/user_model.dart';
 import '../../components/button.dart';
 import '../../components/settings_cellule.dart';
@@ -13,7 +15,7 @@ import '../../config.dart';
 import '../../helper.dart';
 import '../../main.dart';
 import '../auth/form/form_user.dart';
-import '../create_fields/main_create_fields.dart';
+import 'components/create_fields/main_create_fields.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../api.dart';
 
@@ -113,6 +115,7 @@ class _SettingsMainState extends State<SettingsMain> {
                                             child: Scaffold(
                                                 body: FormUser(
                                               backButton: true,
+                                              isEdit: true,
                                             ))));
                                   },
                                 ),
@@ -189,6 +192,9 @@ class _SettingsMainState extends State<SettingsMain> {
                                 SettingsCellule(
                                   onTap: () async {
                                     loading = true;
+                                    if (await GoogleSignIn().isSignedIn()) {
+                                      GoogleSignIn().signOut();
+                                    }
                                     await FirebaseAuth.instance.signOut();
                                     Navigator.pushAndRemoveUntil(
                                         context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
@@ -340,16 +346,14 @@ class _ButtonDropDownState extends State<ButtonDropDown> with SingleTickerProvid
                   PageTransition(
                       duration: Duration(milliseconds: 400),
                       type: PageTransitionType.rightToLeftWithFade,
-                      child: MainCreateFields(
-                        enterpriseUid: widget.uid,
-                      )));
+                      child: MainCreateFields(enterpriseUid: widget.uid)));
             } else if (value == 'Employer') {
-              // Navigator.push(
-              //     context,
-              //     PageTransition(
-              //         duration: Duration(milliseconds: 400),
-              //         type: PageTransitionType.rightToLeftWithFade,
-              //         child: MainEnterpriseEmploye()));
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      duration: Duration(milliseconds: 400),
+                      type: PageTransitionType.rightToLeftWithFade,
+                      child: MainEnterpriseEmploye(enterpriseUid: widget.uid)));
             }
           },
         ),
