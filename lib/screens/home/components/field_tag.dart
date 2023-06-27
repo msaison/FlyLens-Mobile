@@ -7,7 +7,8 @@ import '../../../helper.dart';
 class FieldTagMain extends StatefulWidget {
   final List<FieldsModel> fieldLists;
   final Function(String? fieldsId) onIndex;
-  const FieldTagMain({required this.fieldLists, required this.onIndex, Key? key}) : super(key: key);
+  final bool all;
+  const FieldTagMain({required this.fieldLists, required this.onIndex, this.all = false, Key? key}) : super(key: key);
 
   @override
   State<FieldTagMain> createState() => _FieldTagMainState();
@@ -24,7 +25,7 @@ class _FieldTagMainState extends State<FieldTagMain> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         physics: BouncingScrollPhysics(),
-        children: [fieldtag('Tous les champs', 0)] +
+        children: ((!widget.all ? [fieldtag('Tous les champs', 0)] : <Widget>[])) +
             List.generate(widget.fieldLists.length, (index) {
               return fieldtag(widget.fieldLists[index].name, index + 1);
             }),
@@ -38,8 +39,10 @@ class _FieldTagMainState extends State<FieldTagMain> {
       child: inkWell(
         borderRadius: BorderRadius.circular(12.r),
         onTap: () => setState(() {
-          if (__index > 0) widget.onIndex(widget.fieldLists[__index - 1].id);
-          else widget.onIndex(null);
+          if (__index > 0)
+            widget.onIndex(widget.fieldLists[__index - 1].id);
+          else
+            widget.onIndex(null);
           _index = __index;
         }),
         child: Container(

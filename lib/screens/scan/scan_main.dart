@@ -60,7 +60,7 @@ class _ScanMainState extends State<ScanMain> {
                   SizedBox(height: 10.h),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 29.w),
-                    child: TextFormUpdated.classic(
+                    child: TextFormCustom.classic(
                       fieldNameStyle: TextStyle(color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.w500),
                       backgroundColor: Colors.white,
                       onChanged: (text) {
@@ -220,12 +220,9 @@ class _ScanMainState extends State<ScanMain> {
                     await FirebaseFirestore.instance
                         .collection(COLLECTION_USER)
                         .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({
-                      "company": code
-                    });
+                        .update({"company": code});
 
                     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => MyApp()), (route) => false);
-                    // print(doc["name"]);
                   },
                 ),
                 SizedBox(

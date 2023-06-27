@@ -83,24 +83,6 @@ class JoinAnEnterprise extends StatelessWidget {
   }
 }
 
-class ModifYourEnterprise extends StatelessWidget {
-  const ModifYourEnterprise({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SettingsCellule(
-      icon: Icons.business_center_rounded,
-      text: 'Votre entreprise',
-      miniText: 'Gestion employer, Gestion drone, Gestion champs, ect...',
-      onTap: () {
-        print('gestion');
-      },
-    );
-  }
-}
-
 
 class EmployerCellule extends StatelessWidget {
   final ImageProvider? image;

@@ -16,10 +16,7 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       sexe: json['sexe'] as String? ?? null,
       registrationDone: json['registrationDone'] as bool? ?? false,
       socialRegister: json['socialRegister'] as bool? ?? false,
-      enterprise: (json['enterprise'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          null,
+      company: json['company'] as String? ?? null,
       joinEnterprise: (json['joinEnterprise'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -36,6 +33,6 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'sexe': instance.sexe,
       'registrationDone': instance.registrationDone,
       'socialRegister': instance.socialRegister,
-      'enterprise': instance.enterprise,
+      'company': instance.company,
       'joinEnterprise': instance.joinEnterprise,
     };

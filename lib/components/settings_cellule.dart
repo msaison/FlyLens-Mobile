@@ -9,9 +9,11 @@ import '../helper.dart';
 class SettingsCellule extends StatefulWidget {
   final VoidCallback? onTap;
   final IconData? icon;
+  final bool withStartIcon;
   final String? text;
   final String? miniText;
   final bool withArrow;
+  final IconData? iconArrow;
   final Color? textAndIconColor;
   final Function(bool)? onSwitch;
   final String? svgIcon;
@@ -23,10 +25,12 @@ class SettingsCellule extends StatefulWidget {
       this.text,
       this.miniText,
       this.withArrow = true,
+      this.iconArrow,
       this.textAndIconColor,
       this.onSwitch,
       this.svgIcon,
       this.launchUri,
+      this.withStartIcon = true,
       Key? key})
       : super(key: key);
 
@@ -53,6 +57,7 @@ class _SettingsCelluleState extends State<SettingsCellule> {
           children: [
             Row(
               children: [
+                widget.withStartIcon ?
                 widget.svgIcon != null
                     ? SvgPicture.asset(
                         widget.svgIcon!,
@@ -62,7 +67,7 @@ class _SettingsCelluleState extends State<SettingsCellule> {
                         widget.icon ?? Icons.block,
                         color: widget.textAndIconColor ?? AppColor.primaryColor,
                         size: 21,
-                      ),
+                      ) : SizedBox(),
                 SizedBox(width: 11.w),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   AutoSizeText(
@@ -96,7 +101,7 @@ class _SettingsCelluleState extends State<SettingsCellule> {
                   )
                 : widget.withArrow
                     ? Icon(
-                        Icons.arrow_forward_ios_rounded,
+                        widget.iconArrow ?? Icons.arrow_forward_ios_rounded,
                         color: AppColor.primaryColor,
                         size: 16,
                       )

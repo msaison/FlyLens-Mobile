@@ -14,8 +14,10 @@ class Header extends StatelessWidget {
   final String title;
   final Color? titleColor;
   final double? titleSize;
+  final FontWeight? titleWeight;
   final Color? iconBackButtonColor;
   final bool invertColor;
+  final Widget? leftWidget;
   const Header(
       {this.backgroundBackButton = Colors.white,
       this.backgroundIconButton = Colors.white,
@@ -28,8 +30,10 @@ class Header extends StatelessWidget {
       this.title = 'Title',
       this.titleColor,
       this.titleSize,
+      this.titleWeight,
       this.iconBackButtonColor,
       this.invertColor = false,
+      this.leftWidget,
       Key? key})
       : super(key: key);
 
@@ -75,38 +79,40 @@ class Header extends StatelessWidget {
                       style: TextStyle(
                           color: titleColor ?? (invertColor ? AppColor.primaryColor : Colors.white),
                           fontSize: titleSize ?? 13.sp,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: titleWeight ?? FontWeight.w600),
                     ),
                   ),
                 )
               : SizedBox(),
-          onTapIcon != null
-              ? Material(
-                  type: MaterialType.transparency,
-                  child: Container(
+          !(leftWidget != null)
+              ? onTapIcon != null
+                  ? Material(
+                      type: MaterialType.transparency,
+                      child: Container(
+                          height: 46,
+                          width: 46,
+                          decoration: BoxDecoration(
+                              color: invertColor ? AppColor.primaryColor : backgroundIconButton,
+                              borderRadius: BorderRadius.circular(14.r)),
+                          child: Material(
+                            type: MaterialType.transparency,
+                            child: InkWell(
+                              splashColor: invertColor ? Colors.white38 : AppColor.primaryColor.withOpacity(0.38),
+                              borderRadius: BorderRadius.circular(14),
+                              onTap: onTapIcon,
+                              child: customIcon ??
+                                  Icon(
+                                    Icons.add,
+                                    size: 32,
+                                    color: invertColor ? Colors.white : AppColor.primaryColor,
+                                  ),
+                            ),
+                          )))
+                  : const SizedBox(
                       height: 46,
                       width: 46,
-                      decoration: BoxDecoration(
-                          color: invertColor ? AppColor.primaryColor : backgroundIconButton,
-                          borderRadius: BorderRadius.circular(14.r)),
-                      child: Material(
-                        type: MaterialType.transparency,
-                        child: InkWell(
-                          splashColor: invertColor ? Colors.white38 : AppColor.primaryColor.withOpacity(0.38),
-                          borderRadius: BorderRadius.circular(14),
-                          onTap: onTapIcon,
-                          child: customIcon ??
-                              Icon(
-                                Icons.add,
-                                size: 32,
-                                color: invertColor ? Colors.white : AppColor.primaryColor,
-                              ),
-                        ),
-                      )))
-              : const SizedBox(
-                  height: 46,
-                  width: 46,
-                ),
+                    )
+              : leftWidget!,
         ],
       ),
     );

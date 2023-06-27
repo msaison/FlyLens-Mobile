@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:latlong2/latlong.dart';
 
-class TextFormUpdated extends StatelessWidget {
+class TextFormCustom extends StatelessWidget {
   final TextEditingController? controller;
   final double? radius;
   final String? hintText;
@@ -71,7 +71,7 @@ class TextFormUpdated extends StatelessWidget {
   final double? minLine;
   final double? maxLine;
 
-  const TextFormUpdated({
+  const TextFormCustom({
     this.focusNode,
     this.controller,
     this.fieldName,
@@ -134,7 +134,7 @@ class TextFormUpdated extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const factory TextFormUpdated.classic({
+  const factory TextFormCustom.classic({
     final String? fieldName,
     final Color? backgroundColor,
     final Color? cursorColor,
@@ -173,7 +173,7 @@ class TextFormUpdated extends StatelessWidget {
     final Function(String)? onChanged,
   }) = _Classic;
 
-  const factory TextFormUpdated.phoneNumber({
+  const factory TextFormCustom.phoneNumber({
     final PhoneNumber? initialPhoneValue,
     final String? fieldName,
     final Color? backgroundColor,
@@ -207,7 +207,7 @@ class TextFormUpdated extends StatelessWidget {
     final TextEditingController? controller,
   }) = _PhoneNumber;
 
-  const factory TextFormUpdated.dateTime({
+  const factory TextFormCustom.dateTime({
     final String? fieldName,
     final Color? backgroundColor,
     final Color? cursorColor,
@@ -243,42 +243,7 @@ class TextFormUpdated extends StatelessWidget {
     final TextEditingController? controller,
   }) = _DateTime;
 
-  factory TextFormUpdated.immatriculation({
-    final String? fieldName,
-    final Color? backgroundColor,
-    final Color? cursorColor,
-    final String? hintText,
-    final double? radius,
-    final EdgeInsets? contentPadding,
-    final TextStyle? fieldNameStyle,
-    final TextStyle? hintTextStyle,
-    final TextStyle? textStyle,
-    final bool? error,
-    final bool? filled,
-    final String? errorMessage,
-    final String? fieldPostRedirection,
-    final TextStyle? fieldPostRedirectionStyle,
-    final VoidCallback? postFieldOnClick,
-    final FocusNode? focusNode,
-    final FocusNode? nextFocusNode,
-    final BoxConstraints? prefixChildBoxConstraint,
-    final BoxConstraints? suffixChildBoxConstraint,
-    final Widget? suffixChild,
-    final Widget? prefixChild,
-    final TextInputAction? textInputAction,
-    final bool? obscuringText,
-    final String? Function(String?)? validator,
-    final Function(String?)? onSaved,
-    final Function(String)? onFieldSubmitted,
-    final InputBorder? focusedErrorBorder,
-    final InputBorder? errorBorder,
-    final InputBorder? focusedBorder,
-    final InputBorder? border,
-    final String? defaultValue,
-    final void Function(String?)? onChanged,
-  }) = _Immatriculation;
-
-  const factory TextFormUpdated.textarea({
+  const factory TextFormCustom.textarea({
     final String? fieldName,
     final TextStyle? fieldNameStyle,
     final String? hintText,
@@ -313,7 +278,7 @@ class TextFormUpdated extends StatelessWidget {
   }
 }
 
-class _Classic extends TextFormUpdated {
+class _Classic extends TextFormCustom {
   const _Classic({
     final String? fieldName,
     final Color? backgroundColor,
@@ -482,7 +447,7 @@ class _Classic extends TextFormUpdated {
   }
 }
 
-class _PhoneNumber extends TextFormUpdated {
+class _PhoneNumber extends TextFormCustom {
   const _PhoneNumber({
     final PhoneNumber? initialPhoneValue,
     final String? fieldName,
@@ -660,7 +625,7 @@ class _PhoneNumber extends TextFormUpdated {
   }
 }
 
-class _DateTime extends TextFormUpdated {
+class _DateTime extends TextFormCustom {
   const _DateTime({
     final String? fieldName,
     final Color? backgroundColor,
@@ -859,273 +824,7 @@ class _DateTime extends TextFormUpdated {
   }
 }
 
-class _Immatriculation extends TextFormUpdated {
-  final FocusNode form0Node = FocusNode();
-  final FocusNode form1Node = FocusNode();
-  final FocusNode form2Node = FocusNode();
-
-  final TextEditingController form0Controller = TextEditingController();
-  final TextEditingController form2Controller = TextEditingController();
-  final TextEditingController form1Controller = TextEditingController();
-
-  _Immatriculation({
-    final String? fieldName,
-    final Color? backgroundColor,
-    final Color? cursorColor,
-    final String? hintText,
-    final double? radius,
-    final EdgeInsets? contentPadding,
-    final TextStyle? fieldNameStyle,
-    final TextStyle? hintTextStyle,
-    final TextStyle? textStyle,
-    final bool? error,
-    final bool? filled,
-    final String? errorMessage,
-    final String? fieldPostRedirection,
-    final TextStyle? fieldPostRedirectionStyle,
-    final VoidCallback? postFieldOnClick,
-    final FocusNode? focusNode,
-    final FocusNode? nextFocusNode,
-    final BoxConstraints? prefixChildBoxConstraint,
-    final BoxConstraints? suffixChildBoxConstraint,
-    final Widget? suffixChild,
-    final Widget? prefixChild,
-    final TextInputAction? textInputAction,
-    final bool? obscuringText,
-    final String? Function(String?)? validator,
-    final Function(String?)? onSaved,
-    final Function(String)? onFieldSubmitted,
-    final InputBorder? focusedErrorBorder,
-    final InputBorder? errorBorder,
-    final InputBorder? focusedBorder,
-    final InputBorder? border,
-    final String? defaultValue,
-    final void Function(String?)? onChanged,
-  }) : super(
-          fieldName: fieldName,
-          fieldPostRedirectionStyle: fieldPostRedirectionStyle,
-          cursorColor: cursorColor,
-          focusedErrorBorder: focusedErrorBorder,
-          errorBorder: errorBorder,
-          focusedBorder: focusedBorder,
-          border: border,
-          error: error,
-          errorMessage: errorMessage,
-          fieldPostRedirection: fieldPostRedirection,
-          postFieldOnClick: postFieldOnClick,
-          focusNode: focusNode,
-          nextFocusNode: nextFocusNode,
-          prefixChildBoxConstraint: prefixChildBoxConstraint,
-          suffixChildBoxConstraint: suffixChildBoxConstraint,
-          suffixChild: suffixChild,
-          prefixChild: prefixChild,
-          textInputAction: textInputAction,
-          obscuringText: obscuringText,
-          validator: validator,
-          onFieldSubmitted: onFieldSubmitted,
-          onSaved: onSaved,
-          filled: filled,
-          backgroundColor: backgroundColor,
-          hintText: hintText,
-          radius: radius,
-          contentPadding: contentPadding,
-          fieldNameStyle: fieldNameStyle,
-          hintTextStyle: hintTextStyle,
-          textStyle: textStyle,
-          onChanged: onChanged,
-          defaultValue: defaultValue,
-        );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            (error ?? false) && (errorMessage != null)
-                ? Text(
-                    errorMessage ?? "",
-                    style: fieldNameStyle?.copyWith(color: Colors.red) ??
-                        const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Colors.red),
-                  )
-                : fieldName != null
-                    ? Text(
-                        fieldName!,
-                        style: fieldNameStyle ??
-                            const TextStyle(color: Color(0xFF02132B), fontSize: 12, fontWeight: FontWeight.w500),
-                      )
-                    : Container(),
-            fieldPostRedirection == null ? const SizedBox() : const Spacer(),
-            fieldPostRedirection == null
-                ? const SizedBox()
-                : InkWell(
-                    onTap: postFieldOnClick,
-                    child: Text(
-                      fieldPostRedirection ?? "",
-                      style: fieldPostRedirectionStyle ??
-                          const TextStyle(
-                            color: Color(0xFF02132B),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.underline,
-                          ),
-                    )),
-          ],
-        ),
-        SizedBox(
-          height: 7.h,
-        ),
-        Row(
-          children: [
-            formTmp(
-              4,
-              context,
-              hintText != null ? hintText!.substring(0, 2) : "00",
-              focusNode ?? FocusNode(),
-              false,
-              (_) {
-                if (onChanged != null) onChanged!(form0Controller.text + form1Controller.text + form2Controller.text);
-                if (_.length >= 2) FocusScope.of(context).requestFocus(form1Node);
-              },
-              form0Controller,
-              2,
-            ),
-            SizedBox(
-              width: 7.h,
-            ),
-            formTmp(
-              7,
-              context,
-              hintText != null ? hintText!.substring(2, 5) : "ABC",
-              form1Node,
-              false,
-              (_) {
-                if (onChanged != null) onChanged!(form0Controller.text + form1Controller.text + form2Controller.text);
-                if (_.length >= 3) FocusScope.of(context).requestFocus(form2Node);
-                if (_.isEmpty) FocusScope.of(context).requestFocus(focusNode);
-              },
-              form1Controller,
-              3,
-            ),
-            SizedBox(
-              width: 7.h,
-            ),
-            formTmp(
-              4,
-              context,
-              hintText != null ? hintText!.substring(5, 7) : "00",
-              form2Node,
-              true,
-              (_) {
-                if (onChanged != null) onChanged!(form0Controller.text + form1Controller.text + form2Controller.text);
-                if (_.length >= 2 && nextFocusNode != null) {
-                  FocusScope.of(context).requestFocus(nextFocusNode);
-                } else if (_.length >= 2) {
-                  FocusScope.of(context).unfocus();
-                }
-                if (_.isEmpty) FocusScope.of(context).requestFocus(form1Node);
-              },
-              form2Controller,
-              2,
-            ),
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget formTmp(
-    int flex,
-    BuildContext context,
-    String? hintText_,
-    FocusNode focusNode_,
-    bool lastForm_,
-    Function(String)? onChanged_,
-    TextEditingController controller,
-    int maxChar,
-  ) {
-    return Expanded(
-      flex: flex,
-      child: SizedBox(
-        height: 54,
-        child: TextFormField(
-          controller: controller,
-          textAlign: TextAlign.center,
-          textInputAction: lastForm_ ? textInputAction : null,
-          validator: lastForm_ ? validator : null,
-          keyboardType: TextInputType.text,
-          focusNode: focusNode_,
-          onChanged: onChanged_,
-          inputFormatters: [LengthLimitingTextInputFormatter(maxChar)],
-          onSaved: lastForm_
-              ? (_) {
-                  if (onSaved != null) onSaved!(form0Controller.text + form1Controller.text + form2Controller.text);
-                }
-              : null,
-          onFieldSubmitted: lastForm_
-              ? (String val) {
-                  if (onFieldSubmitted != null)
-                    onFieldSubmitted!(form0Controller.text + form1Controller.text + form2Controller.text);
-                  FocusScope.of(context).requestFocus(nextFocusNode);
-                }
-              : (_) {},
-          obscureText: obscuringText ?? false,
-          obscuringCharacter: '*',
-          style: textStyle ??
-              const TextStyle(color: Color(0xFF02132B), fontSize: 13, fontWeight: FontWeight.w500)
-                  .copyWith(color: const Color(0xFF02132B)),
-          cursorColor: cursorColor ?? const Color(0xFF02132B),
-          decoration: InputDecoration(
-              errorStyle: const TextStyle(fontSize: 12, height: 0),
-              prefixIcon: prefixChild,
-              suffixIcon: error ?? false
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        suffixChild ?? const SizedBox(),
-                        const Icon(
-                          Icons.error_outline,
-                          color: Colors.red,
-                          size: 28,
-                        ),
-                        const SizedBox(width: 13)
-                      ],
-                    )
-                  : suffixChild,
-              prefixIconConstraints: prefixChildBoxConstraint,
-              suffixIconConstraints: suffixChildBoxConstraint,
-              filled: filled ?? true,
-              fillColor: backgroundColor ?? const Color(0xFF02132B).withOpacity(0.03),
-              contentPadding: contentPadding ?? const EdgeInsets.fromLTRB(9.5, 17.5, 9.5, 17.5),
-              focusedErrorBorder: focusedErrorBorder ??
-                  OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(
-                        color: Colors.redAccent,
-                        width: 0.5,
-                      )),
-              errorBorder: errorBorder ??
-                  OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(
-                        color: Colors.red,
-                        width: 0.5,
-                      )),
-              focusedBorder: focusedBorder,
-              border:
-                  border ?? UnderlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: BorderSide.none),
-              hintText: hintText_,
-              // hintText: placeholder != null ? placeholder!.substring(5, 7) : "00",
-              hintStyle: hintTextStyle ??
-                  const TextStyle(color: Color(0xFF9299A4), fontSize: 13, fontWeight: FontWeight.w500)),
-        ),
-      ),
-    );
-  }
-}
-
-class _TextArea extends TextFormUpdated {
+class _TextArea extends TextFormCustom {
   const _TextArea({
     final String? fieldName,
     final TextStyle? fieldNameStyle,
@@ -1382,9 +1081,9 @@ class GooglePlaceFormField extends StatefulWidget {
 
 class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
   List<AutocompletePrediction> _predictions = [];
-  String _city = "";
+  // String _city = "";
   String _street = "";
-  String _country = "";
+  // String _country = "";
 
   @override
   Widget build(BuildContext context) {
@@ -1400,7 +1099,7 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
                 ))
             : SizedBox(),
         SizedBox(height: 6.h),
-        TextFormUpdated.classic(
+        TextFormCustom.classic(
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Ce champ est obligatoire.';
@@ -1421,7 +1120,6 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
               var result = await widget.googlePlace.autocomplete
                   .get(value, language: 'fr', components: [Component("country", "fr")]);
               if (result != null) {
-                print(result.predictions);
                 setState(() {
                   _predictions = result.predictions!;
                 });
@@ -1447,8 +1145,8 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
                       onTap: () async {
                         setState(() {
                           _street = "";
-                          _city = "";
-                          _country = "";
+                          // _city = "";
+                          // _country = "";
                         });
                         DetailsResponse? result = await widget.googlePlace.details.get(
                           _predictions[index].reference!,
@@ -1457,11 +1155,11 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
                         );
                         if (result != null && result.result != null) {
                           for (final component in result.result!.addressComponents!) {
-                            if (component.types!.contains("locality")) {
-                              setState(() {
-                                _city = component.longName!;
-                              });
-                            }
+                            // if (component.types!.contains("locality")) {
+                            //   setState(() {
+                            //     _city = component.longName!;
+                            //   });
+                            // }
                             if (component.types!.contains("street_number")) {
                               setState(() {
                                 _street = component.longName! + " ";
@@ -1472,18 +1170,16 @@ class _GooglePlaceFormFieldState extends State<GooglePlaceFormField> {
                                 _street = _street + component.longName!;
                               });
                             }
-                            if (component.types!.contains("country")) {
-                              setState(() {
-                                _country = component.longName!;
-                              });
-                            }
-                            print(_street + " " + _city + " " + _country);
+                            // if (component.types!.contains("country")) {
+                            //   setState(() {
+                            //     _country = component.longName!;
+                            //   });
+                            // }
                           }
                           setState(() {
                             LatLng _geoloc = LatLng(
                                 result.result!.geometry!.location!.lat!, result.result!.geometry!.location!.lng!);
                             if (widget.position != null) widget.position!(_geoloc);
-                            // print(_geoloc);
                           });
                         }
                         setState(() {

@@ -18,7 +18,6 @@ import '../../../api.dart';
 import '../../../components/alert_toast.dart';
 import '../../../helper.dart';
 
-
 class RegisterMain extends StatefulWidget {
   @override
   State<RegisterMain> createState() => _RegisterMainState();
@@ -87,7 +86,7 @@ class _RegisterMainState extends State<RegisterMain> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 200.h),
-                        TextFormUpdated.classic(
+                        TextFormCustom.classic(
                           controller: emailController,
                           nextFocusNode: passwordNode,
                           textInputAction: TextInputAction.next,
@@ -113,7 +112,7 @@ class _RegisterMainState extends State<RegisterMain> {
                           alignment: Alignment.bottomCenter,
                           children: [
                             ProgressPasswordStrongBar(passwordStrength: passwordStrength),
-                            TextFormUpdated.classic(
+                            TextFormCustom.classic(
                               controller: passwordController,
                               focusNode: passwordNode,
                               nextFocusNode: passwordConfirmNode,
@@ -157,7 +156,7 @@ class _RegisterMainState extends State<RegisterMain> {
                         ),
                         passwordVerifColumn(),
                         SizedBox(height: 17.h),
-                        TextFormUpdated.classic(
+                        TextFormCustom.classic(
                           textInputAction: TextInputAction.next,
                           controller: passwordConfirmController,
                           focusNode: passwordConfirmNode,
@@ -463,5 +462,4 @@ class ProgressPasswordStrongBar extends StatelessWidget {
 
   //////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
-
 }

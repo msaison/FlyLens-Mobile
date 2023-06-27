@@ -15,7 +15,6 @@ class AuthHelper {
 
     if (googleUser != null) {
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      print('${googleAuth.accessToken} ${googleAuth.idToken}');
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,

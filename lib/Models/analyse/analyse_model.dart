@@ -35,8 +35,10 @@ class LeafConvert implements JsonConverter<Leaf, Map<String, dynamic>> {
 
   @override
   Map<String, dynamic> toJson(Leaf object) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    return {
+      'Unhealthy-leaf': object.unhealthyLeaf,
+      'Healthy-leaf': object.healthyleaf,
+    };
   }
 }
 

@@ -29,7 +29,7 @@ mixin _$UserModel {
   String? get sexe => throw _privateConstructorUsedError;
   bool get registrationDone => throw _privateConstructorUsedError;
   bool get socialRegister => throw _privateConstructorUsedError;
-  List<String>? get enterprise => throw _privateConstructorUsedError;
+  String? get company => throw _privateConstructorUsedError;
   List<String>? get joinEnterprise => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? sexe,
       bool registrationDone,
       bool socialRegister,
-      List<String>? enterprise,
+      String? company,
       List<String>? joinEnterprise});
 }
 
@@ -77,7 +77,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? sexe = freezed,
     Object? registrationDone = null,
     Object? socialRegister = null,
-    Object? enterprise = freezed,
+    Object? company = freezed,
     Object? joinEnterprise = freezed,
   }) {
     return _then(_value.copyWith(
@@ -113,10 +113,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.socialRegister
           : socialRegister // ignore: cast_nullable_to_non_nullable
               as bool,
-      enterprise: freezed == enterprise
-          ? _value.enterprise
-          : enterprise // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      company: freezed == company
+          ? _value.company
+          : company // ignore: cast_nullable_to_non_nullable
+              as String?,
       joinEnterprise: freezed == joinEnterprise
           ? _value.joinEnterprise
           : joinEnterprise // ignore: cast_nullable_to_non_nullable
@@ -141,7 +141,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String? sexe,
       bool registrationDone,
       bool socialRegister,
-      List<String>? enterprise,
+      String? company,
       List<String>? joinEnterprise});
 }
 
@@ -164,7 +164,7 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? sexe = freezed,
     Object? registrationDone = null,
     Object? socialRegister = null,
-    Object? enterprise = freezed,
+    Object? company = freezed,
     Object? joinEnterprise = freezed,
   }) {
     return _then(_$_UserModel(
@@ -200,10 +200,10 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.socialRegister
           : socialRegister // ignore: cast_nullable_to_non_nullable
               as bool,
-      enterprise: freezed == enterprise
-          ? _value._enterprise
-          : enterprise // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      company: freezed == company
+          ? _value.company
+          : company // ignore: cast_nullable_to_non_nullable
+              as String?,
       joinEnterprise: freezed == joinEnterprise
           ? _value._joinEnterprise
           : joinEnterprise // ignore: cast_nullable_to_non_nullable
@@ -224,10 +224,9 @@ class _$_UserModel implements _UserModel {
       this.sexe = null,
       this.registrationDone = false,
       this.socialRegister = false,
-      final List<String>? enterprise = null,
+      this.company = null,
       final List<String>? joinEnterprise = null})
-      : _enterprise = enterprise,
-        _joinEnterprise = joinEnterprise;
+      : _joinEnterprise = joinEnterprise;
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -256,17 +255,9 @@ class _$_UserModel implements _UserModel {
   @override
   @JsonKey()
   final bool socialRegister;
-  final List<String>? _enterprise;
   @override
   @JsonKey()
-  List<String>? get enterprise {
-    final value = _enterprise;
-    if (value == null) return null;
-    if (_enterprise is EqualUnmodifiableListView) return _enterprise;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  final String? company;
   final List<String>? _joinEnterprise;
   @override
   @JsonKey()
@@ -280,7 +271,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, prenom: $prenom, naissance: $naissance, profilePicture: $profilePicture, sexe: $sexe, registrationDone: $registrationDone, socialRegister: $socialRegister, enterprise: $enterprise, joinEnterprise: $joinEnterprise)';
+    return 'UserModel(id: $id, email: $email, prenom: $prenom, naissance: $naissance, profilePicture: $profilePicture, sexe: $sexe, registrationDone: $registrationDone, socialRegister: $socialRegister, company: $company, joinEnterprise: $joinEnterprise)';
   }
 
   @override
@@ -300,8 +291,7 @@ class _$_UserModel implements _UserModel {
                 other.registrationDone == registrationDone) &&
             (identical(other.socialRegister, socialRegister) ||
                 other.socialRegister == socialRegister) &&
-            const DeepCollectionEquality()
-                .equals(other._enterprise, _enterprise) &&
+            (identical(other.company, company) || other.company == company) &&
             const DeepCollectionEquality()
                 .equals(other._joinEnterprise, _joinEnterprise));
   }
@@ -318,7 +308,7 @@ class _$_UserModel implements _UserModel {
       sexe,
       registrationDone,
       socialRegister,
-      const DeepCollectionEquality().hash(_enterprise),
+      company,
       const DeepCollectionEquality().hash(_joinEnterprise));
 
   @JsonKey(ignore: true)
@@ -345,7 +335,7 @@ abstract class _UserModel implements UserModel {
       final String? sexe,
       final bool registrationDone,
       final bool socialRegister,
-      final List<String>? enterprise,
+      final String? company,
       final List<String>? joinEnterprise}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -369,7 +359,7 @@ abstract class _UserModel implements UserModel {
   @override
   bool get socialRegister;
   @override
-  List<String>? get enterprise;
+  String? get company;
   @override
   List<String>? get joinEnterprise;
   @override

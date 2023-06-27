@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flylens/components/gallery_image/galleryimage.dart';
+import '../../../Models/analyse/analyse_model.dart' show HealthyLeaf, UnhealthyLeaf;
+import '../../../components/gallery_image/galleryimage.dart';
 import '../../../components/button.dart';
 import '../../../components/providers/analyses.dart';
-import '../../../helper.dart';
+import '../../../api.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
 import '../../../config.dart';
 
@@ -43,121 +44,127 @@ class _AnalyseMainState extends ConsumerState<AnalyseMain> {
             builder: (context, AsyncSnapshot<AnalyseGlobal?> snapshot) {
               double size = (MediaQuery.of(context).size.width / 2 - 35) - 10;
               if (snapshot.hasData && snapshot.data != null) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        AnalyseCard(
-                            size: size,
-                            icon: Icons.watch_later_rounded,
-                            middle: Timeago(
-                                date: snapshot.data!.lastRefresh,
-                                locale: 'fr',
-                                allowFromNow: true,
-                                refreshRate: Duration(seconds: 10),
-                                builder: (_, value) => Time(
-                                      time: value,
-                                      colorText: Colors.black,
-                                    ))),
-                        SizedBox(height: 15.h),
-                        AnalyseCard(
-                            size: size,
-                            icon: Icons.sentiment_very_dissatisfied_rounded,
-                            bigCard: true,
-                            backgroundColor: AppColor.primaryColor,
-                            textColor: Colors.white,
-                            middle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  snapshot.data!.analyseModel.classes_stats.unhealthyLeaf!.count.toString(),
-                                  style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w500, color: Colors.white),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Feuille avec un problème potientiel',
-                                  style: TextStyle(color: Colors.white54, fontSize: 13.sp),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  '${(snapshot.data!.analyseModel.classes_stats.unhealthyLeaf!.mean * 100).toStringAsFixed(1)}% de sûreté.',
-                                  style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: Colors.white),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        AnalyseCard(
-                            size: size,
-                            icon: Icons.emoji_emotions_rounded,
-                            bigCard: true,
-                            backgroundColor: AppColor.primaryColor,
-                            textColor: Colors.white,
-                            middle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  snapshot.data!.analyseModel.classes_stats.healthyleaf!.count.toString(),
-                                  style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w500, color: Colors.white),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Feuille en bonne santé',
-                                  style: TextStyle(color: Colors.white54, fontSize: 13.sp),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  '${(snapshot.data!.analyseModel.classes_stats.healthyleaf!.mean * 100).toStringAsFixed(1)}% de sûreté.',
-                                  style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: Colors.white),
-                                ),
-                              ],
-                            )),
-                        SizedBox(height: 15.h),
-                        AnalyseCard(
-                            size: size,
-                            icon: Icons.percent_rounded,
-                            middle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  (snapshot.data!.analyseModel.health_score * 100).toStringAsFixed(1),
-                                  style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w500),
-                                ),
-                                Text(
-                                  'Santé global',
-                                  style: TextStyle(color: Colors.black54, fontSize: 13.sp),
-                                ),
-                              ],
-                            ))
-                      ],
-                    )
-                  ],
-                );
+                HealthyLeaf? healthy = snapshot.data!.analyseModel.classes_stats.healthyleaf;
+                UnhealthyLeaf? unhealthy = snapshot.data!.analyseModel.classes_stats.unhealthyLeaf;
+                return analyse(size, snapshot, healthy, unhealthy);
               } else {
                 return Center(
                   child: Text("Aucune analyse(s) détécter."),
-                  //     child: SpinKitWave(
-                  //   color: AppColor.primaryColor,
-                  // )
                 );
               }
             },
           ),
         ),
         FutureBuilder(
-          future: fetchImageFields(null, widget.companyID),
+          future: fetchImageFields(widget.fieldID, widget.companyID),
           builder: (context, AsyncSnapshot<List<String>?> snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
-              return GalleryImage(imageUrls: snapshot.data!);
+              return GalleryImage(
+                imageUrls: snapshot.data!,
+                numOfShowImages: snapshot.data!.length < 3 ? snapshot.data!.length : 3,
+              );
             } else {
               return Container();
             }
           },
         ),
+      ],
+    );
+  }
+
+  Widget analyse(double size, AsyncSnapshot<AnalyseGlobal?> snapshot, HealthyLeaf? healthy, UnhealthyLeaf? unhealthy) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            AnalyseCard(
+                size: size,
+                icon: Icons.watch_later_rounded,
+                middle: Timeago(
+                    date: snapshot.data!.lastRefresh,
+                    locale: 'fr',
+                    allowFromNow: true,
+                    refreshRate: Duration(seconds: 10),
+                    builder: (_, value) => Time(
+                          time: value,
+                          colorText: Colors.black,
+                        ))),
+            SizedBox(height: 15.h),
+            AnalyseCard(
+                size: size,
+                icon: Icons.sentiment_very_dissatisfied_rounded,
+                bigCard: true,
+                backgroundColor: AppColor.primaryColor,
+                textColor: Colors.white,
+                middle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      unhealthy != null ? unhealthy.count.toString() : '0',
+                      style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w500, color: Colors.white),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Feuille avec un problème potientiel',
+                      style: TextStyle(color: Colors.white54, fontSize: 13.sp),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      unhealthy != null ? '${(unhealthy.mean * 100).toStringAsFixed(1)}% de sûreté.' : '0% de sûreté.',
+                      style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: Colors.white),
+                    ),
+                  ],
+                )),
+          ],
+        ),
+        Column(
+          children: [
+            AnalyseCard(
+                size: size,
+                icon: Icons.emoji_emotions_rounded,
+                bigCard: true,
+                backgroundColor: AppColor.primaryColor,
+                textColor: Colors.white,
+                middle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      healthy != null ? healthy.count.toString() : '0',
+                      style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w500, color: Colors.white),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Feuille en bonne santé',
+                      style: TextStyle(color: Colors.white54, fontSize: 13.sp),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      healthy != null ? '${(healthy.mean * 100).toStringAsFixed(1)}% de sûreté.' : '0% de sûreté.',
+                      style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: Colors.white),
+                    ),
+                  ],
+                )),
+            SizedBox(height: 15.h),
+            AnalyseCard(
+                size: size,
+                icon: Icons.percent_rounded,
+                middle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      (snapshot.data!.analyseModel.health_score * 100).toStringAsFixed(1),
+                      style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      'Santé global',
+                      style: TextStyle(color: Colors.black54, fontSize: 13.sp),
+                    ),
+                  ],
+                ))
+          ],
+        )
       ],
     );
   }

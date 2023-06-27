@@ -1,10 +1,12 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'screens/home/home_main.dart';
 import 'helper.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
 import 'screens/auth/join_or_create_enterprise.dart';
-import 'screens/bottom_bar/main_bottom_bar.dart';
 import 'config.dart';
 import 'handle_auth.dart';
 import 'screens/auth/form/form_user.dart';
@@ -12,11 +14,21 @@ import 'package:flutter/material.dart';
 import 'screens/on_boarding/on_boarding_main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../api.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setLocaleMessages('fr', FrMessagesCustom());
+
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -45,12 +57,16 @@ class _MyAppState extends State<MyApp> {
               child: MaterialApp(
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(fontFamily: 'Poppins', primaryColor: AppColor.primaryColor),
+                localizationsDelegates: <LocalizationsDelegate<Object>>[
+                  GlobalMaterialLocalizations.delegate,
+                ],
+                supportedLocales: [const Locale('fr')],
                 home: Builder(
                   builder: (context) => FutureBuilder(
                       future: handleAuth(
                         redirections: {
                           COLLECTION_USER: RedirectionHandle(
-                              homePage: MainBottomBar(),
+                              homePage: HomeMain(),
                               normalRegister: FormUser(),
                               socialRegister: FormUser(),
                               entreprise: JoinOrCreateEnterprise()),

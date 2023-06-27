@@ -7,7 +7,6 @@ import '../../../Models/weather/weather_model.dart';
 import '../../../api.dart';
 import '../../../components/button.dart';
 import '../../../components/form_fields.dart';
-import '../../../helper.dart';
 import 'package:google_place/google_place.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:uuid/uuid.dart';

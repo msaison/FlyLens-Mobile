@@ -44,7 +44,10 @@ class _QrCodeMainState extends State<QrCodeMain> {
                   QrImageView(
                     data: widget.companyCode,
                     version: QrVersions.auto,
-                    foregroundColor: Colors.black,
+                    eyeStyle: QrEyeStyle(
+                      eyeShape: QrEyeShape.square,
+                      color: Colors.black,
+                    ),
                     size: 200.h,
                   ),
                 ],

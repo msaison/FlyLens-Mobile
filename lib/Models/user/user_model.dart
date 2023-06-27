@@ -14,7 +14,7 @@ class UserModel with _$UserModel {
   @Default(null) String? sexe,
   @Default(false) bool registrationDone,
   @Default(false) bool socialRegister,
-  @Default(null) List<String>? enterprise,
+  @Default(null) String? company,
   @Default(null) List<String>? joinEnterprise,
   }) = _UserModel;
 

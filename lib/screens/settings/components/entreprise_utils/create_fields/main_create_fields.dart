@@ -4,16 +4,16 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../../../Models/fields/fields_model.dart';
-import '../../../../components/button.dart';
-import '../../../../helper.dart';
+import '../../../../../Models/fields/fields_model.dart';
+import '../../../../../components/button.dart';
+import '../../../../../helper.dart';
 import 'components/card_create_fields.dart';
 import 'components/header_create_fields.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../config.dart';
-import '../../../../api.dart';
+import '../../../../../config.dart';
+import '../../../../../api.dart';
 
 class MainCreateFields extends StatefulWidget {
   final String enterpriseUid;
@@ -235,7 +235,6 @@ class _MainCreateFieldsState extends State<MainCreateFields> {
                                       onTap: () async {
                                         String uuid = Uuid().v4();
                                         if (pointTmp.length >= 4) {
-                                          //TODO UIDEDITING CRASHED SOMETIMES
                                           if (_uidEditing == null) {
                                             await FirebaseFirestore.instance
                                                 .collection(COLLECTION_ENTERPRISE)

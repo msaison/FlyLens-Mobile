@@ -2,11 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../api.dart';
-import '../helper.dart';
 import 'package:iconsax/iconsax.dart';
-import '../config.dart';
 import 'package:weather/weather.dart';
+
+import '../api.dart';
+import '../config.dart';
+import '../helper.dart';
 
 class WeatherShow extends StatefulWidget {
   final double latitude;

@@ -77,7 +77,7 @@ class _LoginMainState extends State<LoginMain> {
                                 ),
                               ),
                               SizedBox(height: 30.h),
-                              TextFormUpdated.classic(
+                              TextFormCustom.classic(
                                 controller: emailController,
                                 focusNode: emailFocus,
                                 nextFocusNode: passwordFocus,
@@ -98,7 +98,7 @@ class _LoginMainState extends State<LoginMain> {
                                 },
                               ),
                               SizedBox(height: 17.h),
-                              TextFormUpdated.classic(
+                              TextFormCustom.classic(
                                 controller: passwordController,
                                 focusNode: passwordFocus,
                                 textInputAction: TextInputAction.next,

@@ -14,12 +14,16 @@ class _HeaderMainState extends State<HeaderMain> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
       height: 70.h,
       child: Row(
         children: [
           SizedBox(width: 15.w),
-          SvgPicture.asset('assets/svg/logo.svg', width: 40, height: 40, color: AppColor.primaryColor,),
+          SvgPicture.asset(
+            'assets/svg/logo.svg',
+            width: 40,
+            height: 40,
+            color: AppColor.primaryColor,
+          ),
         ],
       ),
     );

@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../../../components/button.dart';
-import '../../../components/header.dart';
-import '../../../config.dart';
-import '../../../helper.dart';
-import '../../qr_code/qr_code_main.dart';
-import 'custom_cellules.dart';
+import '../../../../api.dart';
+import '../../../../components/button.dart';
+import '../../../../components/header.dart';
+import '../../../../config.dart';
+import '../../../qr_code/qr_code_main.dart';
+import '../custom_cellules.dart';
 import 'package:page_transition/page_transition.dart';
 
 class MainEnterpriseEmploye extends StatefulWidget {
@@ -27,8 +27,8 @@ class _MainEnterpriseEmployeState extends State<MainEnterpriseEmploye> {
           Header(
             invertColor: true,
             onTapBackButton: () => Navigator.pop(context),
-            titleSize: 23,
-            title: 'Employer',
+            titleSize: 20.sp,
+            title: 'Employés',
           ),
           SizedBox(height: 20.h),
           Padding(

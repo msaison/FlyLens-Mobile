@@ -20,7 +20,6 @@ class AnalyseProvider with ChangeNotifier {
   }
 
   AnalyseGlobal? findModel(String entrepriseId, String? fieldId) {
-    print(Color(0xffffebeb).value);
     int index = 0;
     if (_analyseList.isNotEmpty && _analyseList.length > 0) {
       if (fieldId != null) {

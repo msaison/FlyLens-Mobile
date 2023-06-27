@@ -1,21 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'components/main_entreprise_employe.dart';
+import '../../components/header.dart';
+import 'enterprise_settings_main.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../Models/user/user_model.dart';
 import '../../components/button.dart';
 import '../../components/settings_cellule.dart';
-import '../../components/tuple.dart';
 import '../../config.dart';
-import '../../helper.dart';
 import '../../main.dart';
 import '../auth/form/form_user.dart';
-import 'components/create_fields/main_create_fields.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../api.dart';
 
@@ -33,9 +30,8 @@ class _SettingsMainState extends State<SettingsMain> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h),
-      child: StreamBuilder(
+    return Scaffold(
+      body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection(COLLECTION_USER)
               .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -45,57 +41,60 @@ class _SettingsMainState extends State<SettingsMain> {
             if (snapshot.hasData && snapshot.data!.exists) {
               UserModel user = UserModel.fromJson(snapshot.data!.data()!);
               return !loading
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 11.w),
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 39.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Paramètres',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: AppColor.primaryColor, fontSize: 24.sp, fontWeight: FontWeight.w500),
-                                ),
-                                user.profilePicture != null
-                                    ? CachedNetworkImage(
-                                        imageUrl: user.profilePicture!,
-                                        imageBuilder: (context, imageProvider) {
-                                          return Container(
-                                            width: 48.w,
-                                            height: 48.h,
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(image: imageProvider), shape: BoxShape.circle),
-                                          );
-                                        },
-                                      )
-                                    : Container(
-                                        height: 48,
-                                        width: 48,
+                  ? SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Header(
+                            invertColor: true,
+                            title: 'Paramètres',
+                            titleSize: 24.sp,
+                            titleWeight: FontWeight.w500,
+                            onTapBackButton: () => Navigator.pop(context),
+                            leftWidget: user.profilePicture != null
+                                ? CachedNetworkImage(
+                                    imageUrl: user.profilePicture!,
+                                    imageBuilder: (context, imageProvider) {
+                                      return Container(
+                                        width: 48.w,
+                                        height: 48.h,
                                         decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage('assets/image/no_profile_picture.jpeg')),
-                                            shape: BoxShape.circle),
-                                      )
-                              ],
-                            ),
-                            SizedBox(height: 25.h),
-                            Container(
-                                height: 0.5, width: double.infinity, color: AppColor.primaryColor.withOpacity(0.14)),
-                            SingleChildScrollView(
+                                            image: DecorationImage(image: imageProvider), shape: BoxShape.circle),
+                                      );
+                                    },
+                                  )
+                                : Container(
+                                    height: 48,
+                                    width: 48,
+                                    decoration: BoxDecoration(
+                                        image:
+                                            DecorationImage(image: AssetImage('assets/image/no_profile_picture.jpeg')),
+                                        shape: BoxShape.circle),
+                                  ),
+                          ),
+                          SizedBox(height: 25.h),
+                          Container(
+                              height: 0.5, width: double.infinity, color: AppColor.primaryColor.withOpacity(0.14)),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 11.w),
+                            child: SingleChildScrollView(
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 SizedBox(height: 11.h),
                                 FutureBuilder(
                                     future: haveAnEntreprise(FirebaseAuth.instance.currentUser!.uid),
                                     builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Object?>?> doc) {
                                       if (doc.hasData)
-                                        return ButtonDropDown(
-                                          uid: doc.data!['uid'],
+                                        return SettingsCellule(
+                                          icon: Icons.business_center_rounded,
+                                          text: 'Votre Entreprise',
+                                          miniText: doc.data!['nom'],
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              PageTransition(
+                                                  duration: Duration(milliseconds: 400),
+                                                  type: PageTransitionType.rightToLeftWithFade,
+                                                  child: EnterpriseSettingsMain(uid: doc.data!['uid']))),
                                         );
                                       else {
                                         return SizedBox();
@@ -213,8 +212,8 @@ class _SettingsMainState extends State<SettingsMain> {
                                 SizedBox(height: 150.h)
                               ]),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     )
                   : SpinKitWave(
@@ -228,136 +227,6 @@ class _SettingsMainState extends State<SettingsMain> {
               ));
             }
           }),
-    );
-  }
-}
-
-List<Tuple2<String, IconData>> items = [
-  Tuple2("Employer", Icons.person),
-  Tuple2("Champs", Icons.business),
-];
-
-class ButtonDropDown extends StatefulWidget {
-  final String uid;
-  const ButtonDropDown({required this.uid, Key? key}) : super(key: key);
-
-  @override
-  State<ButtonDropDown> createState() => _ButtonDropDownState();
-}
-
-class _ButtonDropDownState extends State<ButtonDropDown> with SingleTickerProviderStateMixin {
-  String selectedValue = "Paramètres entreprise";
-
-  double dropDownAngle = -1.55;
-
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(duration: Duration(milliseconds: 800), vsync: this);
-    _animationController.forward();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 55.h,
-      decoration: BoxDecoration(
-        color: AppColor.primaryColor.withOpacity(0.03),
-        borderRadius: BorderRadius.circular(7.r),
-      ),
-      child: Center(
-        child: DropdownButton2(
-          dropdownPadding: EdgeInsets.zero,
-          offset: Offset(0, -20),
-          dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(7.r),
-          ),
-          // buttonPadding: EdgeInsets.symmetric(horizontal: 20.w),
-          isDense: true,
-          isExpanded: true,
-          // elevation: 0,
-          onMenuStateChange: (isOpen) {
-            setState(() {
-              isOpen ? dropDownAngle = 0 : dropDownAngle = -1.55;
-            });
-          },
-          underline: Container(),
-          alignment: Alignment.center,
-          icon: Padding(
-            padding: EdgeInsets.only(right: 18.h),
-            child: AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) => Transform.rotate(
-                angle: _animationController.value * dropDownAngle,
-                child: Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColor.primaryColor,
-                  size: 25.sp,
-                ),
-              ),
-            ),
-          ),
-          // borderRadius: BorderRadius.circular(7.r),
-          hint: Row(
-            children: [
-              SizedBox(
-                width: 7.h,
-              ),
-              Icon(
-                Icons.business,
-                color: AppColor.primaryColor,
-                size: 21,
-              ),
-              SizedBox(width: 11.w),
-              Text(
-                "Paramètres entreprise",
-                style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w600)
-                    .copyWith(fontFamily: "Poppins"),
-              ),
-            ],
-          ),
-          items: items
-              .map((e) => DropdownMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(
-                        e.item2,
-                        color: AppColor.primaryColor,
-                        size: 21,
-                      ),
-                      SizedBox(width: 11.w),
-                      Text(
-                        e.item1,
-                        style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w600)
-                            .copyWith(fontFamily: "Poppins"),
-                      ),
-                    ],
-                  ),
-                  value: e.item1))
-              .toList(),
-          style: TextStyle(color: AppColor.primaryColor, fontSize: 13.sp, fontWeight: FontWeight.w600)
-              .copyWith(fontFamily: "Poppins"),
-          onChanged: (String? value) {
-            if (value == 'Champs') {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      duration: Duration(milliseconds: 400),
-                      type: PageTransitionType.rightToLeftWithFade,
-                      child: MainCreateFields(enterpriseUid: widget.uid)));
-            } else if (value == 'Employer') {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      duration: Duration(milliseconds: 400),
-                      type: PageTransitionType.rightToLeftWithFade,
-                      child: MainEnterpriseEmploye(enterpriseUid: widget.uid)));
-            }
-          },
-        ),
-      ),
     );
   }
 }

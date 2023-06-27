@@ -72,7 +72,7 @@ class _FormCompanyState extends State<FormCompany> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormUpdated.classic(
+                    TextFormCustom.classic(
                       fieldName: 'Nom*',
                       hintText: 'Ex. FlyLens',
                       cursorColor: AppColor.primaryColor,
@@ -92,7 +92,7 @@ class _FormCompanyState extends State<FormCompany> {
                       },
                     ),
                     SizedBox(height: 14.h),
-                    TextFormUpdated.classic(
+                    TextFormCustom.classic(
                       fieldName: 'Siret*',
                       hintText: 'Ex. 291920309',
                       textInputType: TextInputType.number,
@@ -119,7 +119,7 @@ class _FormCompanyState extends State<FormCompany> {
                       },
                     ),
                     SizedBox(height: 14.h),
-                    TextFormUpdated.phoneNumber(
+                    TextFormCustom.phoneNumber(
                       fieldName: 'Numéro de téléphone*',
                       controller: controllerTel,
                       focusNode: focusTel,
@@ -133,7 +133,7 @@ class _FormCompanyState extends State<FormCompany> {
                     ),
                     SizedBox(height: 14.h),
                     secondphone
-                        ? TextFormUpdated.phoneNumber(
+                        ? TextFormCustom.phoneNumber(
                             fieldName: 'Second Numéro de téléphone',
                             controller: controllerTelBis,
                             focusNode: focusTelBis,
@@ -165,7 +165,7 @@ class _FormCompanyState extends State<FormCompany> {
                             },
                           ),
                     SizedBox(height: 14.h),
-                    TextFormUpdated.classic(
+                    TextFormCustom.classic(
                       fieldName: "Adresse de l'entreprise*",
                       hintText: 'Ex. 12 Avenue Pauliani',
                       controller: controllerAdress,
@@ -184,7 +184,7 @@ class _FormCompanyState extends State<FormCompany> {
                     ),
                     SizedBox(height: 14.h),
                     secondadress
-                        ? TextFormUpdated.classic(
+                        ? TextFormCustom.classic(
                             fieldName: "Seconde adresse de l'entreprise",
                             hintText: 'Ex. 12 Avenue Pauliani',
                             controller: controllerAdressBis,

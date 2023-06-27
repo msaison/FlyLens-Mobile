@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../api.dart';
 import '../../../components/button.dart';
 import '../../../components/form_fields.dart';
 import '../../../components/header.dart';
 import '../../../config.dart';
 import '../../../helper.dart';
 import '../../../main.dart';
-import '../../../api.dart';
 
 class FormUser extends StatefulWidget {
   final bool backButton;
@@ -56,7 +57,7 @@ class _FormUserState extends State<FormUser> {
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormUpdated.classic(
+                  TextFormCustom.classic(
                     fieldName: 'Prénom*',
                     hintText: 'Ex. John',
                     cursorColor: AppColor.primaryColor,
@@ -77,7 +78,7 @@ class _FormUserState extends State<FormUser> {
                     },
                   ),
                   SizedBox(height: 14.h),
-                  TextFormUpdated.classic(
+                  TextFormCustom.classic(
                     fieldName: 'Nom*',
                     hintText: 'Ex. Doe',
                     focusNode: focusNom,
@@ -97,7 +98,7 @@ class _FormUserState extends State<FormUser> {
                     },
                   ),
                   SizedBox(height: 14.h),
-                  TextFormUpdated.phoneNumber(
+                  TextFormCustom.phoneNumber(
                     fieldName: 'Numéro de téléphone*',
                     // controller: controllerTel,
                     focusNode: focusTel,
@@ -112,7 +113,7 @@ class _FormUserState extends State<FormUser> {
                     },
                   ),
                   SizedBox(height: 14.h),
-                  TextFormUpdated.dateTime(
+                  TextFormCustom.dateTime(
                     fieldName: 'Date de naissance*',
                     hintText: '01/02/1997',
                     focusNode: focusNaissance,
